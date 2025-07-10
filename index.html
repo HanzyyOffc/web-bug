@@ -3,187 +3,116 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login Produk - HanzyyOffc</title>
+  <title>Produk HanzyyOffc</title>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
       --bg: #0e0e0e;
       --text: #fff;
       --primary: #00ffcc;
-      --pink: #ff66ff;
+      --danger: #ff4444;
     }
-
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
       background: var(--bg);
       color: var(--text);
-      overflow-x: hidden;
     }
-
     #particles-js {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
       z-index: 0;
     }
-
-    .login-panel, .produk-panel {
+    .container {
       position: relative;
       z-index: 2;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      animation: fadeIn 1s ease-in-out;
-    }
-
-    .glass-box {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      padding: 40px 30px;
-      backdrop-filter: blur(18px);
-      box-shadow: 0 0 25px rgba(0, 255, 204, 0.2);
+      padding: 30px;
       text-align: center;
-      max-width: 400px;
-      width: 100%;
     }
-
-    input[type="text"] {
-      padding: 12px;
-      width: 100%;
+    .glass-box {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 20px auto;
+      max-width: 800px;
+    }
+    input, button, select {
+      padding: 10px 15px;
+      margin: 10px;
+      border-radius: 8px;
       border: none;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.1);
-      color: white;
       font-size: 1rem;
-      margin-bottom: 20px;
-      outline: none;
-      border: 1px solid var(--primary);
     }
-
-    .btn-modern {
-      padding: 14px 24px;
-      background: linear-gradient(135deg, #00ffcc, #00bfa6);
+    input {
+      width: 200px;
+    }
+    .btn {
+      background: var(--primary);
       color: black;
       font-weight: bold;
-      font-size: 1rem;
-      border: none;
-      border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 0 15px #00ffcc, 0 0 25px #00ffcc50;
-      transition: 0.3s;
     }
-
-    .btn-modern:hover {
-      background: linear-gradient(135deg, #00bfa6, #00ffcc);
-      box-shadow: 0 0 20px #00ffcc, 0 0 35px #00ffcc50;
+    .btn:hover {
+      background: #00ddb3;
     }
-
-    .produk-panel {
-      flex-direction: column;
-      display: none;
-      text-align: center;
-    }
-
-    .produk-list {
-      margin-top: 30px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      max-width: 900px;
-      width: 100%;
-      padding: 0 20px;
-    }
-
     .produk-item {
-      background: rgba(255, 255, 255, 0.07);
-      padding: 20px;
-      border-radius: 12px;
-      transition: 0.3s;
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+      padding: 10px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 10px;
     }
-
-    .produk-item:hover {
-      background: rgba(255, 255, 255, 0.12);
-      transform: scale(1.03);
+    .keranjang-item {
+      margin-top: 10px;
+      background: rgba(255,255,255,0.1);
+      padding: 10px;
+      border-radius: 10px;
     }
-
-    .produk-item h3 {
-      margin-bottom: 10px;
-      font-size: 1.1rem;
-    }
-
-    #gantiNamaBtn {
-      background: linear-gradient(135deg, var(--pink), #ff33aa);
-      color: white;
-      margin-bottom: 20px;
-      box-shadow: 0 0 12px var(--pink);
-      font-size: 0.9rem;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-    }
-
-    #gantiNamaBtn:hover {
-      box-shadow: 0 0 20px var(--pink);
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
+    canvas {
+      max-width: 100%;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-
 <div id="particles-js"></div>
+<div class="container">
 
-<!-- LOGIN PANEL -->
-<div class="login-panel" id="loginPanel">
-  <div class="glass-box">
-    <h2>👤 Masukkan Nama Anda</h2>
-    <input type="text" id="inputNama" placeholder="Contoh: Hanzy" />
-    <button class="btn-modern" onclick="submitNama()">🚀 Lanjutkan</button>
+  <!-- Login Nama -->
+  <div id="loginBox" class="glass-box">
+    <h2>Masukkan Nama Anda</h2>
+    <input type="text" id="namaUser" placeholder="Contoh: Hanzyy">
+    <button class="btn" onclick="login()">Masuk</button>
   </div>
-</div>
 
-<!-- HALAMAN PRODUK -->
-<div class="produk-panel" id="produkPanel">
-  <button id="gantiNamaBtn" onclick="gantiNama()">🔁 Ganti Nama</button>
-  <h1>👋 Selamat datang, <span id="userNameLabel"></span>!</h1>
-
-  <div class="produk-list" id="produkList">
-    <!-- Produk diisi via JS -->
+  <!-- Produk -->
+  <div id="produkBox" style="display:none" class="glass-box">
+    <h2>Halo, <span id="namaTampil"></span> 👋</h2>
+    <div id="produkList"></div>
+    <hr>
+    <h3>Keranjang</h3>
+    <div id="keranjangList"></div>
+    <div id="diskonInfo"></div>
+    <button class="btn" onclick="checkout()">Checkout via WhatsApp</button>
   </div>
-</div>
 
+  <!-- Statistik -->
+  <div id="statistikBox" style="display:none" class="glass-box">
+    <h3>📊 Statistik Penjualan</h3>
+    <label>Dari: <input type="date" id="fromDate"></label>
+    <label>Sampai: <input type="date" id="toDate"></label>
+    <button class="btn" onclick="filterStatistik()">Tampilkan</button>
+    <canvas id="chartPenjualan" height="200"></canvas>
+  </div>
+
+</div>
 <script>
-particlesJS("particles-js", {
-  particles: {
-    number: { value: 60, density: { enable: true, value_area: 800 }},
-    color: { value: "#ffffff" },
-    shape: { type: "circle" },
-    opacity: { value: 0.4 },
-    size: { value: 3, random: true },
-    line_linked: {
-      enable: true, distance: 150,
-      color: "#ffffff", opacity: 0.3, width: 1
-    },
-    move: { enable: true, speed: 2 }
-  },
-  interactivity: {
-    events: {
-      onhover: { enable: true, mode: "grab" }
-    },
-    modes: { grab: { distance: 200, line_linked: { opacity: 1 } } }
-  },
-  retina_detect: true
-});
-
-const produkData = [
+const produk = [
   { nama: "Script WhatsApp Bot", harga: 50000 },
   { nama: "Script Telegram Auto Reply", harga: 45000 },
   { nama: "Obfuscator JS", harga: 60000 },
@@ -194,44 +123,152 @@ const produkData = [
   { nama: "Panel Unlimited", harga: 10000 }
 ];
 
-function tampilkanProduk() {
-  const produkList = document.getElementById("produkList");
-  produkList.innerHTML = "";
-  produkData.forEach(p => {
-    const item = document.createElement("div");
-    item.className = "produk-item";
-    item.innerHTML = `<h3>${p.nama}</h3><p>Rp${p.harga.toLocaleString()}</p>`;
-    produkList.appendChild(item);
+let keranjang = [];
+let namaUser = '';
+
+function login() {
+  const nama = document.getElementById("namaUser").value.trim();
+  if (!nama) return alert("Nama wajib diisi");
+  namaUser = nama;
+  document.getElementById("namaTampil").innerText = nama;
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("produkBox").style.display = "block";
+  document.getElementById("statistikBox").style.display = "block";
+  renderProduk();
+}
+
+function renderProduk() {
+  const list = document.getElementById("produkList");
+  list.innerHTML = "";
+  produk.forEach((p, i) => {
+    const el = document.createElement("div");
+    el.className = "produk-item";
+    el.innerHTML = `
+      <span>${p.nama} - Rp${p.harga.toLocaleString()}</span>
+      <button class="btn" onclick="tambahKeranjang(${i})">+ Keranjang</button>
+    `;
+    list.appendChild(el);
+  });
+  renderKeranjang();
+}
+
+function tambahKeranjang(i) {
+  keranjang.push(produk[i]);
+  renderKeranjang();
+}
+
+function renderKeranjang() {
+  const wrap = document.getElementById("keranjangList");
+  wrap.innerHTML = "";
+  let total = 0;
+  keranjang.forEach((item, index) => {
+    total += item.harga;
+    const el = document.createElement("div");
+    el.className = "keranjang-item";
+    el.innerHTML = `
+      ${item.nama} - Rp${item.harga.toLocaleString()}
+      <button onclick="hapusItem(${index})" style="float:right;color:red;">X</button>
+    `;
+    wrap.appendChild(el);
+  });
+
+  let diskon = total >= 100000 ? total * 0.1 : 0;
+  document.getElementById("diskonInfo").innerHTML = `
+    <p>Total: <b>Rp${total.toLocaleString()}</b></p>
+    <p>Diskon: <b>Rp${diskon.toLocaleString()}</b></p>
+    <p><b>Total Bayar: Rp${(total - diskon).toLocaleString()}</b></p>
+  `;
+}
+
+function hapusItem(i) {
+  keranjang.splice(i, 1);
+  renderKeranjang();
+}
+
+function checkout() {
+  if (keranjang.length === 0) return alert("Keranjang kosong!");
+  let pesan = `Halo saya ${namaUser}, saya ingin membeli:\n\n`;
+  let total = 0;
+  keranjang.forEach((p, i) => {
+    pesan += `- ${p.nama} = Rp${p.harga.toLocaleString()}\n`;
+    total += p.harga;
+  });
+
+  let diskon = total >= 100000 ? total * 0.1 : 0;
+  let bayar = total - diskon;
+
+  pesan += `\nTotal: Rp${total.toLocaleString()}`;
+  if (diskon > 0) {
+    pesan += `\nDiskon: Rp${diskon.toLocaleString()}`;
+  }
+  pesan += `\nTotal Bayar: Rp${bayar.toLocaleString()}`;
+
+  let url = "https://wa.me/6281234567890?text=" + encodeURIComponent(pesan);
+  window.open(url, '_blank');
+}
+
+// Simulasi data penjualan
+const dataPenjualan = [
+  {"tanggal":"2025-06-11","total":20000},
+  {"tanggal":"2025-06-12","total":250000},
+  {"tanggal":"2025-06-13","total":250000},
+  {"tanggal":"2025-06-14","total":30000},
+  {"tanggal":"2025-06-15","total":60000},
+  {"tanggal":"2025-06-16","total":80000},
+  {"tanggal":"2025-06-17","total":20000},
+  {"tanggal":"2025-06-18","total":225000},
+  {"tanggal":"2025-06-19","total":300000},
+  {"tanggal":"2025-06-20","total":30000},
+  {"tanggal":"2025-06-21","total":40000},
+  {"tanggal":"2025-06-22","total":10000},
+  {"tanggal":"2025-06-23","total":75000},
+  {"tanggal":"2025-06-24","total":375000},
+  {"tanggal":"2025-06-25","total":20000},
+  {"tanggal":"2025-06-26","total":375000},
+  {"tanggal":"2025-06-27","total":50000},
+  {"tanggal":"2025-06-28","total":150000},
+  {"tanggal":"2025-06-29","total":75000},
+  {"tanggal":"2025-06-30","total":10000},
+  {"tanggal":"2025-07-01","total":20000},
+  {"tanggal":"2025-07-02","total":100000},
+  {"tanggal":"2025-07-03","total":75000},
+  {"tanggal":"2025-07-04","total":20000},
+  {"tanggal":"2025-07-05","total":150000},
+  {"tanggal":"2025-07-06","total":80000},
+  {"tanggal":"2025-07-07","total":60000},
+  {"tanggal":"2025-07-08","total":225000},
+  {"tanggal":"2025-07-09","total":10000},
+  {"tanggal":"2025-07-10","total":50000}
+];
+
+function filterStatistik() {
+  const from = document.getElementById("fromDate").value;
+  const to = document.getElementById("toDate").value;
+  if (!from || !to) return alert("Pilih rentang tanggal!");
+
+  const filtered = dataPenjualan.filter(d => d.tanggal >= from && d.tanggal <= to);
+  const labels = filtered.map(d => d.tanggal);
+  const values = filtered.map(d => d.total);
+
+  const ctx = document.getElementById("chartPenjualan").getContext("2d");
+  if (window.penjualanChart) window.penjualanChart.destroy();
+  window.penjualanChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Total Penjualan',
+        backgroundColor: '#00ffccaa',
+        borderColor: '#00ffcc',
+        data: values
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
   });
 }
-
-function submitNama() {
-  const nama = document.getElementById("inputNama").value.trim();
-  if (!nama) return alert("Masukkan nama!");
-  localStorage.setItem("namaUser", nama);
-  bukaHalamanProduk(nama);
-}
-
-function bukaHalamanProduk(nama) {
-  document.getElementById("loginPanel").style.display = "none";
-  document.getElementById("produkPanel").style.display = "flex";
-  document.getElementById("userNameLabel").innerText = nama;
-  tampilkanProduk();
-}
-
-function gantiNama() {
-  const namaBaru = prompt("Masukkan nama baru:");
-  if (namaBaru) {
-    localStorage.setItem("namaUser", namaBaru);
-    bukaHalamanProduk(namaBaru);
-  }
-}
-
-window.onload = () => {
-  const saved = localStorage.getItem("namaUser");
-  if (saved) bukaHalamanProduk(saved);
-};
 </script>
-
-</body>
-</html>
