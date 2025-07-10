@@ -3,212 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Panel Produk HanzyyOffc</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-  <style>
-    :root {
-      --bg: #0e0e0e;
-      --card: rgba(255,255,255,0.06);
-      --text: #fff;
-      --primary: #00ffcc;
-    }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Poppins', sans-serif;
-    }
-    #particles-js {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-    }
-    .container {
-      position: relative;
-      z-index: 2;
-      padding: 20px;
-      max-width: 1100px;
-      margin: auto;
-    }
-    h1, h2 {
-      text-align: center;
-      color: var(--primary);
-      margin-bottom: 20px;
-    }
-    .produk-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 15px;
-      margin-bottom: 30px;
-    }
-    .produk-card {
-      background: var(--card);
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-      transition: 0.3s;
-    }
-    .produk-card:hover {
-      background: rgba(255,255,255,0.1);
-    }
-    .produk-card button {
-      margin-top: 10px;
-      background: var(--primary);
-      color: black;
-      padding: 8px 14px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .keranjang, .statistik {
-      background: var(--card);
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 30px;
-    }
-    .keranjang-item {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 5px;
-    }
-    .filter {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    input[type="date"], select {
-      padding: 10px;
-      background: var(--card);
-      border: 1px solid var(--primary);
-      border-radius: 8px;
-      color: white;
-    }
-    button.checkout {
-      background: #00ffcc;
-      padding: 10px 20px;
-      color: black;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    canvas {
-      background: var(--card);
-      border-radius: 10px;
-      padding: 10px;
-    }
-    button#gantiNama {
-      padding: 6px 14px;
-      background: #00ffcc;
-      color: black;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-  </style>
-</head>
-<body>
-<div id="particles-js"></div>
-<script>
-let namaUser = localStorage.getItem("namaUser");
-if (!namaUser) {
-  namaUser = prompt("Masukkan nama Anda:");
-  if (!namaUser) namaUser = "Pengguna";
-  localStorage.setItem("namaUser", namaUser);
-}
-</script>
-
-<div class="container">
-  <h1>🎯 Panel Produk & Statistik Penjualan</h1>
-  <div style="text-align:center; margin-bottom:10px;">
-    <button id="gantiNama" onclick="gantiNama()">🔁 Ganti Nama</button>
-  </div>
-  <p id="sambutan" style="text-align:center; margin-top:-5px; margin-bottom:30px; color:#bbb; font-size:1rem;"></p>
-
-  <div class="produk-grid" id="produkList"></div>
-
-  <div class="keranjang" id="keranjangBox">
-    <h2>🛒 Keranjang</h2>
-    <div id="keranjangList"></div>
-    <select id="metodeBayar">
-      <option>QRIS</option>
-      <option>DANA</option>
-      <option>OVO</option>
-    </select>
-    <button class="checkout" onclick="checkout()">Checkout via WhatsApp</button>
-  </div>
-
-  <div class="statistik">
-    <h2>📊 Statistik Penjualan</h2>
-    <div class="filter">
-      <input type="date" id="startDate">
-      <input type="date" id="endDate">
-      <button onclick="filterChart()">Filter</button>
-    </div>
-    <canvas id="salesChart" height="100"></canvas>
-  </div>
-</div>
-
-<script>
-particlesJS("particles-js", {
-  particles: {
-    number: { value: 60, density: { enable: true, value_area: 800 }},
-    color: { value: "#ffffff" },
-    shape: { type: "circle" },
-    opacity: { value: 0.4 },
-    size: { value: 3, random: true },
-    line_linked: {
-      enable: true, distance: 150,
-      color: "#ffffff", opacity: 0.3, width: 1
-    },
-    move: { enable: true, speed: 2 }
-  },
-  interactivity: {
-    events: {
-      onhover: { enable: true, mode: "grab" }
-    },
-    modes: { grab: { distance: 200, line_linked: { opacity: 1 } } }
-  },
-  retina_detect: true
-});
-
-document.getElementById("sambutan").innerHTML = `👋 Hai, <b>${namaUser}</b>! Selamat datang di panel produk <b>HanzyyOffc</b>.`;
-
-const produk = [
-  { nama: "Script WhatsApp Bot", harga: 50000 },
-  { nama: "Script Telegram Auto Reply", harga: 45000 },
-  { nama: "Obfuscator JS", harga: 60000 },
-  { nama: "Panel Web Payment", harga: 70000 },
-  { nama: "Script SlayerV4", harga: 25000 },
-  { nama: "Admin Panel Private", harga: 20000 },
-  { nama: "Admin Panel Public", harga: 15000 },
-  { nama: "Panel Unlimited", harga: 10000 }
-];
-
-const cart = [];
-const statistikHarian = {};
-const diskon = 0.1;
-
-const produkList = document.getElementById("produkList");
-produk.forEach(p => {
-  const div = document.createElement("div");
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login HanzyyOffc</title>
+  <title>Login Produk - HanzyyOffc</title>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     :root {
       --bg: #0e0e0e;
       --text: #fff;
       --primary: #00ffcc;
+      --pink: #ff66ff;
     }
 
     body {
@@ -262,27 +64,22 @@ produk.forEach(p => {
       border: 1px solid var(--primary);
     }
 
-    button {
-      padding: 12px 20px;
-      background: var(--primary);
+    .btn-modern {
+      padding: 14px 24px;
+      background: linear-gradient(135deg, #00ffcc, #00bfa6);
       color: black;
       font-weight: bold;
       font-size: 1rem;
       border: none;
-      border-radius: 12px;
+      border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 0 15px var(--primary);
+      box-shadow: 0 0 15px #00ffcc, 0 0 25px #00ffcc50;
       transition: 0.3s;
     }
 
-    button:hover {
-      background: #00ccaa;
-      box-shadow: 0 0 20px #00ccaa;
-    }
-
-    h2 {
-      margin-bottom: 20px;
-      color: var(--primary);
+    .btn-modern:hover {
+      background: linear-gradient(135deg, #00bfa6, #00ffcc);
+      box-shadow: 0 0 20px #00ffcc, 0 0 35px #00ffcc50;
     }
 
     .produk-panel {
@@ -319,10 +116,19 @@ produk.forEach(p => {
     }
 
     #gantiNamaBtn {
-      background: #ff66ff;
+      background: linear-gradient(135deg, var(--pink), #ff33aa);
       color: white;
-      margin-top: 20px;
-      box-shadow: 0 0 10px #ff66ff;
+      margin-bottom: 20px;
+      box-shadow: 0 0 12px var(--pink);
+      font-size: 0.9rem;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    #gantiNamaBtn:hover {
+      box-shadow: 0 0 20px var(--pink);
     }
 
     @keyframes fadeIn {
@@ -340,17 +146,17 @@ produk.forEach(p => {
   <div class="glass-box">
     <h2>👤 Masukkan Nama Anda</h2>
     <input type="text" id="inputNama" placeholder="Contoh: Hanzy" />
-    <button onclick="submitNama()">🚀 Lanjutkan</button>
+    <button class="btn-modern" onclick="submitNama()">🚀 Lanjutkan</button>
   </div>
 </div>
 
 <!-- HALAMAN PRODUK -->
 <div class="produk-panel" id="produkPanel">
-  <h1>👋 Selamat datang, <span id="userNameLabel"></span>!</h1>
   <button id="gantiNamaBtn" onclick="gantiNama()">🔁 Ganti Nama</button>
+  <h1>👋 Selamat datang, <span id="userNameLabel"></span>!</h1>
 
   <div class="produk-list" id="produkList">
-    <!-- Produk akan ditambahkan lewat JS -->
+    <!-- Produk diisi via JS -->
   </div>
 </div>
 
