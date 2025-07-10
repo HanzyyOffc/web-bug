@@ -3,175 +3,176 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hanzyy Produk</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <title>Produk & Statistik Penjualan</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     :root {
-      --main: #ffffff; --second: #cccccc;
-      --bg: #0e0e0e; --text: #eeeeee;
+      --bg: #0e0e0e;
+      --card: rgba(255,255,255,0.06);
+      --text: #fff;
       --primary: #00ffcc;
     }
-    * {
-      margin: 0; padding: 0;
-      box-sizing: border-box;
-      font-family: 'Orbitron', sans-serif;
-    }
     body {
-      background: var(--bg); color: var(--text);
-      min-height: 100vh; padding: 20px;
-      display: flex; align-items: center; justify-content: center;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Poppins', sans-serif;
+    }
+    #particles-js {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
     }
     .container {
-      width: 100%; max-width: 1000px;
-    }
-    .glass-box {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 30px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 0 25px rgba(255,255,255,0.2);
-      margin-bottom: 20px;
-    }
-    h1.title {
-      font-size: 2rem;
-      text-align: center;
-      color: var(--main);
-      margin-bottom: 20px;
-    }
-    .welcome {
-      text-align: center;
-      font-size: 1.2rem;
-      color: var(--primary);
-      margin-bottom: 10px;
-    }
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 20px;
-    }
-    .product-card {
-      background: rgba(255,255,255,0.07);
-      border-radius: 15px;
+      position: relative;
+      z-index: 2;
       padding: 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+    h1, h2 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+    .produk-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    .produk-card {
+      background: var(--card);
+      padding: 15px;
+      border-radius: 10px;
       text-align: center;
       transition: 0.3s;
     }
-    .product-card:hover {
-      transform: scale(1.05);
-      background: rgba(255,255,255,0.12);
-    }
-    .product-card h2 {
-      font-size: 1.2rem;
-      color: var(--primary);
-    }
-    .product-card p {
-      font-size: 0.9rem;
-      color: #ccc;
-    }
-    .product-card button {
-      margin-top: 10px;
-      background: linear-gradient(135deg, var(--main), var(--second));
-      color: #000;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      box-shadow: 0 0 10px var(--main);
-    }
-    .login-box input[type="text"], select {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 12px;
+    .produk-card:hover {
       background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: white;
-      border-radius: 10px;
     }
-    .login-box button {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, var(--main), var(--second));
+    .produk-card button {
+      margin-top: 10px;
+      background: var(--primary);
       color: black;
+      padding: 8px 14px;
       border: none;
-      border-radius: 30px;
-      font-size: 1rem;
+      border-radius: 8px;
       cursor: pointer;
-      box-shadow: 0 0 10px var(--main);
+    }
+    .keranjang, .statistik {
+      background: var(--card);
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 30px;
     }
     .keranjang-item {
       display: flex;
       justify-content: space-between;
-      margin: 8px 0;
+      margin-bottom: 5px;
     }
-    .keranjang-item button {
-      background: crimson;
-      color: white;
-      border: none;
-      padding: 4px 10px;
+    .filter {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    input[type="date"], select {
+      padding: 10px;
+      background: var(--card);
+      border: 1px solid var(--primary);
       border-radius: 8px;
+      color: white;
+    }
+    button.checkout {
+      background: #00ffcc;
+      padding: 10px 20px;
+      color: black;
+      border: none;
+      border-radius: 10px;
       cursor: pointer;
+      margin-top: 10px;
+    }
+    canvas {
+      background: var(--card);
+      border-radius: 10px;
+      padding: 10px;
     }
   </style>
 </head>
 <body>
+<div id="particles-js"></div>
 <div class="container">
-  <div class="glass-box login-box" id="loginBox">
-    <h2>Masukkan Nama Anda</h2>
-    <input type="text" id="username" placeholder="Nama Anda..." />
-    <button onclick="masuk()">Masuk</button>
+  <h1>🛍️ Daftar Produk</h1>
+  <div class="produk-grid" id="produkList"></div>
+
+  <div class="keranjang" id="keranjangBox">
+    <h2>🛒 Keranjang</h2>
+    <div id="keranjangList"></div>
+    <select id="metodeBayar">
+      <option>QRIS</option>
+      <option>DANA</option>
+      <option>OVO</option>
+    </select>
+    <button class="checkout" onclick="checkout()">Checkout via WhatsApp</button>
   </div>
 
-  <div class="glass-box" id="produkBox" style="display:none;">
-    <div class="welcome">Selamat datang, <span id="displayName">User</span> 👋</div>
-    <h1 class="title">Daftar Produk Hanzyy</h1>
-
-    <div class="product-grid">
-      <div class="product-card">
-        <h2>Script Bot WhatsApp</h2>
-        <p>Bot lengkap siap pakai</p>
-        <button onclick="addToCart('Bot WhatsApp', 50000)">Tambah</button>
-      </div>
-      <div class="product-card">
-        <h2>Script Panel Payment</h2>
-        <p>Struk otomatis dan QR ready</p>
-        <button onclick="addToCart('Panel Payment', 75000)">Tambah</button>
-      </div>
-      <div class="product-card">
-        <h2>Auto Checkout System</h2>
-        <p>Checkout by WA & Telegram</p>
-        <button onclick="addToCart('Auto Checkout', 60000)">Tambah</button>
-      </div>
+  <div class="statistik">
+    <h2>📊 Statistik Penjualan</h2>
+    <div class="filter">
+      <input type="date" id="startDate">
+      <input type="date" id="endDate">
+      <button onclick="filterChart()">Filter</button>
     </div>
-
-    <div class="glass-box" id="keranjangBox" style="margin-top:20px;">
-      <h3>🛒 Keranjang Anda</h3>
-      <div id="cartList"></div>
-      <button onclick="hapusSemua()">🧹 Hapus Semua</button>
-      <br/><br/>
-      <select id="metodeBayar">
-        <option value="QRIS">QRIS</option>
-        <option value="Dana">Dana</option>
-        <option value="Gopay">Gopay</option>
-        <option value="Transfer">Transfer Bank</option>
-      </select>
-      <button onclick="checkout()" style="margin-top:15px;">📤 Checkout via WhatsApp</button>
-    </div>
+    <canvas id="salesChart" height="100"></canvas>
   </div>
 </div>
 
 <script>
-let cart = [];
+particlesJS("particles-js", {
+  particles: {
+    number: { value: 60, density: { enable: true, value_area: 800 }},
+    color: { value: "#ffffff" },
+    shape: { type: "circle" },
+    opacity: { value: 0.4 },
+    size: { value: 3, random: true },
+    line_linked: {
+      enable: true, distance: 150,
+      color: "#ffffff", opacity: 0.3, width: 1
+    },
+    move: { enable: true, speed: 2 }
+  },
+  interactivity: {
+    events: {
+      onhover: { enable: true, mode: "grab" }
+    },
+    modes: { grab: { distance: 200, line_linked: { opacity: 1 } } }
+  },
+  retina_detect: true
+});
+
+// Produk Dummy
+const produk = [
+  { nama: "Script WhatsApp Bot", harga: 50000 },
+  { nama: "Script Telegram Auto Reply", harga: 45000 },
+  { nama: "Obfuscator JS", harga: 60000 },
+  { nama: "Panel Web Payment", harga: 70000 }
+];
+
+const cart = [];
+const statistikHarian = {};
 const diskon = 0.1;
 
-function masuk() {
-  const nama = document.getElementById("username").value.trim();
-  if (!nama) return alert("Masukkan nama terlebih dahulu!");
-  document.getElementById("loginBox").style.display = "none";
-  document.getElementById("produkBox").style.display = "block";
-  document.getElementById("displayName").innerText = nama;
-}
+const produkList = document.getElementById("produkList");
+produk.forEach(p => {
+  const div = document.createElement("div");
+  div.className = "produk-card";
+  div.innerHTML = `<h4>${p.nama}</h4><p>Rp${p.harga.toLocaleString()}</p><button onclick="addToCart('${p.nama}', ${p.harga})">+ Keranjang</button>`;
+  produkList.appendChild(div);
+});
 
 function addToCart(nama, harga) {
   cart.push({ nama, harga });
@@ -179,41 +180,97 @@ function addToCart(nama, harga) {
 }
 
 function renderCart() {
-  const el = document.getElementById("cartList");
-  el.innerHTML = cart.map((item, i) => `
-    <div class="keranjang-item">
-      ${item.nama} - Rp${item.harga.toLocaleString()}
-      <button onclick="hapusItem(${i})">x</button>
-    </div>`).join('');
-}
-
-function hapusItem(i) {
-  cart.splice(i, 1);
-  renderCart();
-}
-
-function hapusSemua() {
-  cart = [];
-  renderCart();
+  const box = document.getElementById("keranjangList");
+  if (!cart.length) return box.innerHTML = "<i>Keranjang kosong</i>";
+  box.innerHTML = "";
+  cart.forEach((item, i) => {
+    const div = document.createElement("div");
+    div.className = "keranjang-item";
+    div.innerHTML = `${item.nama} <b>Rp${item.harga.toLocaleString()}</b>`;
+    box.appendChild(div);
+  });
 }
 
 function checkout() {
   if (!cart.length) return alert("Keranjang kosong!");
-  const nama = document.getElementById("displayName").innerText;
   const metode = document.getElementById("metodeBayar").value;
+  let pesan = `Saya ingin membeli:\n`;
   let total = 0;
-  let pesan = `Checkout dari ${nama}:\n`;
   cart.forEach(item => {
     pesan += `- ${item.nama} (Rp${item.harga.toLocaleString()})\n`;
     total += item.harga;
   });
   const potongan = total * diskon;
   const totalAkhir = total - potongan;
-  pesan += `\nDiskon: 10% (-Rp${potongan.toLocaleString()})`;
-  pesan += `\nTotal Bayar: Rp${totalAkhir.toLocaleString()}`;
+  pesan += `\nDiskon 10%: -Rp${potongan.toLocaleString()}`;
+  pesan += `\nTotal: Rp${totalAkhir.toLocaleString()}`;
   pesan += `\nMetode: ${metode}`;
+
   const url = `https://wa.me/6288989566141?text=${encodeURIComponent(pesan)}`;
   window.open(url, '_blank');
+
+  // Simpan statistik
+  const today = new Date().toISOString().slice(0, 10);
+  if (!statistikHarian[today]) statistikHarian[today] = { transaksi: 0, produk: 0, pendapatan: 0 };
+  statistikHarian[today].transaksi++;
+  statistikHarian[today].produk += cart.length;
+  statistikHarian[today].pendapatan += totalAkhir;
+  updateChart();
+
+  cart.length = 0;
+  renderCart();
+}
+
+function generateChartData(data) {
+  const dates = Object.keys(data).sort();
+  return {
+    labels: dates,
+    datasets: [
+      {
+        label: 'Transaksi',
+        data: dates.map(d => data[d].transaksi),
+        borderColor: '#00ffcc',
+        backgroundColor: '#00ffcc40',
+        tension: 0.3
+      },
+      {
+        label: 'Pendapatan',
+        data: dates.map(d => data[d].pendapatan),
+        borderColor: '#ffcc00',
+        backgroundColor: '#ffcc0030',
+        tension: 0.3
+      }
+    ]
+  };
+}
+
+let chart;
+function updateChart() {
+  const data = generateChartData(statistikHarian);
+  if (chart) {
+    chart.data = data;
+    chart.update();
+  } else {
+    chart = new Chart(document.getElementById("salesChart"), {
+      type: 'line',
+      data: data,
+      options: { responsive: true }
+    });
+  }
+}
+
+function filterChart() {
+  const start = document.getElementById("startDate").value;
+  const end = document.getElementById("endDate").value;
+  if (!start || !end) return alert("Pilih tanggal!");
+  const filtered = {};
+  for (const tanggal in statistikHarian) {
+    if (tanggal >= start && tanggal <= end) {
+      filtered[tanggal] = statistikHarian[tanggal];
+    }
+  }
+  chart.data = generateChartData(filtered);
+  chart.update();
 }
 </script>
 </body>
