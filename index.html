@@ -6,6 +6,7 @@
   <title>Produk - HanzyyOffc</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
       --main: #ffffff; --second: #cccccc;
@@ -110,7 +111,7 @@
       margin: 0 auto 30px;
       text-align: center;
     }
-    input[type="text"] {
+    input[type="text"], input[type="password"], input[type="date"], select {
       width: 100%;
       padding: 12px;
       background: rgba(255,255,255,0.05);
@@ -143,6 +144,13 @@
       color: var(--second);
       text-align: center;
     }
+    .riwayat-controls {
+      text-align: center;
+      margin-bottom: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
     .riwayat-list {
       max-height: 300px;
       overflow-y: auto;
@@ -154,12 +162,18 @@
       border-bottom: 1px dashed #777;
       font-size: 0.9rem;
     }
+    canvas {
+      background: #222;
+      border-radius: 10px;
+      margin-top: 20px;
+      padding: 10px;
+    }
   </style>
 </head>
 <body>
 <div id="particles-js"></div>
 <div class="container">
-  <button class="admin-btn" onclick="lihatSemua()">👁️ Semua Login</button>
+  <button class="admin-btn" onclick="adminPanel()">🔐 Admin Panel</button>
   <div class="glass-box login-box" id="loginBox">
     <h2>Masukkan Nama Anda</h2>
     <input type="text" id="username" placeholder="Nama Anda" />
@@ -171,101 +185,55 @@
     <div class="welcome">Selamat datang, <span id="displayName">User</span> 👋</div>
     <h1 class="title">Daftar Produk</h1>
     <div class="product-grid">
-      <div class="product-card">
-        <h2>Script WhatsApp Bot</h2>
-        <p>Bot WhatsApp full fitur anti banned & UI modern.</p>
-        <button onclick="checkout('Script WhatsApp Bot')">🛒 Checkout</button>
-      </div>
-      <div class="product-card">
-        <h2>Obfuscator JS</h2>
-        <p>Lindungi script JS kamu dari pembajakan.</p>
-        <button onclick="checkout('Obfuscator JS')">🛒 Checkout</button>
-      </div>
-      <div class="product-card">
-        <h2>Script Telegram Auto</h2>
-        <p>Auto-reply, auto-order, dan manajemen pelanggan.</p>
-        <button onclick="checkout('Script Telegram Auto')">🛒 Checkout</button>
-      </div>
+      <!-- Produk cards di sini -->
     </div>
     <div class="riwayat">
       <h3>🧾 Riwayat Transaksi</h3>
+      <div class="riwayat-controls">
+        <input type="date" id="filterTanggalMulai" onchange="tampilkanRiwayat()">
+        <input type="date" id="filterTanggalAkhir" onchange="tampilkanRiwayat()">
+        <select id="filterProduk" onchange="tampilkanRiwayat()">
+          <option value="">Semua Produk</option>
+        </select>
+        <input type="text" id="filterUser" placeholder="Cari Nama User..." onkeyup="tampilkanRiwayat()">
+        <input type="text" id="filterWA" placeholder="Cari No. WA..." value="6288989566141" onkeyup="tampilkanRiwayat()">
+        <button onclick="exportRiwayat()">📁 Export</button>
+      </div>
       <div class="riwayat-list" id="riwayatList"></div>
+      <canvas id="chartCanvas" height="200"></canvas>
     </div>
   </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
-const BIN_ID = "686f49c06a80be34f4534f64";
-const API_KEY = "$2a$10$GyDWtMK0NviE0b/eCV.eo.IyWvhOFDfJGhbLmPhaiYbMt9qusgED2";
-const headers = {
-  "Content-Type": "application/json",
-  "X-Master-Key": API_KEY
-};
-
-particlesJS("particles-js", {
-  particles: { number: { value: 60, density: { enable: true, value_area: 800 } }, color: { value: "#ffffff" }, shape: { type: "circle" }, opacity: { value: 0.4 }, size: { value: 3, random: true }, line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.3, width: 1 }, move: { enable: true, speed: 2, direction: "none", random: false } },
-  interactivity: { events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: false } }, modes: { grab: { distance: 200, line_linked: { opacity: 1 } } } },
-  retina_detect: true
-});
-
-function masuk() {
-  const nama = document.getElementById("username").value.trim();
-  if (nama === '') {
-    document.getElementById("notif").innerText = '⚠️ Nama tidak boleh kosong';
-    return;
-  }
-  document.getElementById("loginBox").style.display = "none";
-  document.getElementById("produkBox").style.display = "block";
-  document.getElementById("displayName").innerText = nama;
-  sessionStorage.setItem("namaUser", nama);
-  tampilkanRiwayat();
-}
-
-async function simpanDataUser(nama, produk) {
-  const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers });
-  const data = await res.json();
-  const riwayat = data.record || [];
-  riwayat.push({ nama, produk, waktu: new Date().toLocaleString() });
-  await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-    method: "PUT",
-    headers,
-    body: JSON.stringify(riwayat)
+let chart;
+function renderChart(data) {
+  const ctx = document.getElementById('chartCanvas').getContext('2d');
+  const bulanMap = {};
+  data.forEach(r => {
+    if (!r.tanggal) return;
+    const date = new Date(r.tanggal);
+    const key = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;
+    bulanMap[key] = (bulanMap[key] || 0) + 1;
   });
-  tampilkanRiwayat();
+  const labels = Object.keys(bulanMap);
+  const counts = Object.values(bulanMap);
+  if (chart) chart.destroy();
+  chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{ label: 'Transaksi per Bulan', data: counts, backgroundColor: '#00f0ff' }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+  });
 }
-
-async function tampilkanRiwayat() {
-  const riwayatList = document.getElementById("riwayatList");
-  riwayatList.innerHTML = "<i>Loading...</i>";
-  try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers });
-    const data = await res.json();
-    const riwayat = data.record || [];
-    const nama = sessionStorage.getItem("namaUser");
-    const semua = (nama.toLowerCase() === 'admin');
-    const list = riwayat
-      .filter(r => semua || r.nama === nama)
-      .reverse()
-      .map(r => `<div class='riwayat-item'>👤 <b>${r.nama}</b><br>✅ ${r.produk}<br><small>${r.waktu}</small></div>`)
-      .join('');
-    riwayatList.innerHTML = list || "<i>Belum ada transaksi.</i>";
-  } catch (e) {
-    riwayatList.innerHTML = "<i>Gagal memuat riwayat.</i>";
-  }
-}
-
-function checkout(namaProduk) {
-  const nama = document.getElementById("displayName").innerText;
-  alert("🛒 Anda telah memilih: " + namaProduk + "\nData tersimpan!");
-  simpanDataUser(nama, namaProduk);
-}
-
-async function lihatSemua() {
-  const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers });
-  const data = await res.json();
-  const list = data.record.map(r => `👤 <b>${r.nama}</b> - ✅ ${r.produk} - <small>${r.waktu}</small>`).reverse().join("<br>");
-  alert("📋 Semua Riwayat:\n\n" + list);
+function exportRiwayat() {
+  const text = document.getElementById('riwayatList').innerText;
+  const blob = new Blob([text], { type: 'text/plain' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'riwayat-transaksi.txt';
+  link.click();
 }
 </script>
 </body>
