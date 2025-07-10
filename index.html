@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Produk - HanzyyOffc</title>
+  <title>Hanzyy Produk</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
       --main: #ffffff; --second: #cccccc;
@@ -23,30 +22,11 @@
       min-height: 100vh; padding: 20px;
       display: flex; align-items: center; justify-content: center;
     }
-    #particles-js {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-    }
     .container {
       position: relative;
       z-index: 2;
       width: 100%;
       max-width: 1200px;
-    }
-    .admin-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 0.8rem;
-      background: rgba(255,255,255,0.1);
-      color: var(--main);
-      border: 1px solid var(--second);
-      padding: 5px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-      z-index: 10;
     }
     .glass-box {
       background: rgba(255,255,255,0.05);
@@ -111,7 +91,7 @@
       margin: 0 auto 30px;
       text-align: center;
     }
-    input[type="text"], input[type="password"], input[type="date"], select {
+    input[type="text"] {
       width: 100%;
       padding: 12px;
       background: rgba(255,255,255,0.05);
@@ -136,44 +116,10 @@
       color: #00ffcc;
       margin: 10px 0;
     }
-    .riwayat {
-      margin-top: 30px;
-    }
-    .riwayat h3 {
-      margin-bottom: 10px;
-      color: var(--second);
-      text-align: center;
-    }
-    .riwayat-controls {
-      text-align: center;
-      margin-bottom: 10px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 10px;
-    }
-    .riwayat-list {
-      max-height: 300px;
-      overflow-y: auto;
-      padding: 10px;
-      border-top: 1px solid var(--second);
-    }
-    .riwayat-item {
-      padding: 8px;
-      border-bottom: 1px dashed #777;
-      font-size: 0.9rem;
-    }
-    canvas {
-      background: #222;
-      border-radius: 10px;
-      margin-top: 20px;
-      padding: 10px;
-    }
   </style>
 </head>
 <body>
-<div id="particles-js"></div>
 <div class="container">
-  <button class="admin-btn" onclick="adminPanel()">🔐 Admin Panel</button>
   <div class="glass-box login-box" id="loginBox">
     <h2>Masukkan Nama Anda</h2>
     <input type="text" id="username" placeholder="Nama Anda" />
@@ -183,57 +129,36 @@
 
   <div class="glass-box" id="produkBox" style="display: none;">
     <div class="welcome">Selamat datang, <span id="displayName">User</span> 👋</div>
-    <h1 class="title">Daftar Produk</h1>
+    <h1 class="title">Produk Hanzyy Terbaik</h1>
     <div class="product-grid">
-      <!-- Produk cards di sini -->
-    </div>
-    <div class="riwayat">
-      <h3>🧾 Riwayat Transaksi</h3>
-      <div class="riwayat-controls">
-        <input type="date" id="filterTanggalMulai" onchange="tampilkanRiwayat()">
-        <input type="date" id="filterTanggalAkhir" onchange="tampilkanRiwayat()">
-        <select id="filterProduk" onchange="tampilkanRiwayat()">
-          <option value="">Semua Produk</option>
-        </select>
-        <input type="text" id="filterUser" placeholder="Cari Nama User..." onkeyup="tampilkanRiwayat()">
-        <input type="text" id="filterWA" placeholder="Cari No. WA..." value="6288989566141" onkeyup="tampilkanRiwayat()">
-        <button onclick="exportRiwayat()">📁 Export</button>
+      <div class="product-card">
+        <h2>Bot WhatsApp</h2>
+        <p>Bot fitur lengkap & aman digunakan</p>
+        <button>Beli Sekarang</button>
       </div>
-      <div class="riwayat-list" id="riwayatList"></div>
-      <canvas id="chartCanvas" height="200"></canvas>
+      <div class="product-card">
+        <h2>Script Auto Order</h2>
+        <p>Integrasi dengan WhatsApp & Telegram</p>
+        <button>Beli Sekarang</button>
+      </div>
+      <div class="product-card">
+        <h2>Panel Web Payment</h2>
+        <p>Struk otomatis, notifikasi real-time</p>
+        <button>Beli Sekarang</button>
+      </div>
     </div>
   </div>
 </div>
 <script>
-let chart;
-function renderChart(data) {
-  const ctx = document.getElementById('chartCanvas').getContext('2d');
-  const bulanMap = {};
-  data.forEach(r => {
-    if (!r.tanggal) return;
-    const date = new Date(r.tanggal);
-    const key = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;
-    bulanMap[key] = (bulanMap[key] || 0) + 1;
-  });
-  const labels = Object.keys(bulanMap);
-  const counts = Object.values(bulanMap);
-  if (chart) chart.destroy();
-  chart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{ label: 'Transaksi per Bulan', data: counts, backgroundColor: '#00f0ff' }]
-    },
-    options: { responsive: true, plugins: { legend: { display: false } } }
-  });
-}
-function exportRiwayat() {
-  const text = document.getElementById('riwayatList').innerText;
-  const blob = new Blob([text], { type: 'text/plain' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = 'riwayat-transaksi.txt';
-  link.click();
+function masuk() {
+  const nama = document.getElementById("username").value.trim();
+  if (!nama) {
+    document.getElementById("notif").innerText = "Masukkan nama Anda dulu";
+    return;
+  }
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("produkBox").style.display = "block";
+  document.getElementById("displayName").innerText = nama;
 }
 </script>
 </body>
