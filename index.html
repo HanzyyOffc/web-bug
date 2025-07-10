@@ -20,9 +20,19 @@
     body {
       background: var(--bg); color: var(--text);
       min-height: 100vh; padding: 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
     }
     .container {
-      max-width: 1200px; margin: 0 auto;
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 1200px;
     }
     .glass-box {
       background: rgba(255,255,255,0.05);
@@ -31,7 +41,7 @@
       padding: 30px;
       backdrop-filter: blur(10px);
       box-shadow: 0 0 25px rgba(255,255,255,0.2);
-      margin-bottom: 40px;
+      margin: 0 auto;
     }
     h1.title {
       font-size: 2rem;
@@ -117,12 +127,13 @@
   </style>
 </head>
 <body>
+<div id="particles-js"></div>
 <div class="container">
-  <div class="glass-box login-box">
+  <div class="glass-box login-box" id="loginBox">
     <h1 class="title">Login Admin</h1>
-    <input type="text" placeholder="Username" />
-    <input type="password" placeholder="Password" />
-    <button class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</button>
+    <input type="text" id="username" placeholder="Username" />
+    <input type="password" id="password" placeholder="Password" />
+    <button class="btn-login" onclick="login()"><i class="fas fa-sign-in-alt"></i> Login</button>
     <div class="demo-info">
       <p><strong>Demo Login:</strong></p>
       <p>👤 Username: <code>admin</code></p>
@@ -130,7 +141,7 @@
     </div>
   </div>
 
-  <div class="glass-box">
+  <div class="glass-box" id="produkBox" style="display: none;">
     <h1 class="title">Daftar Produk</h1>
     <div class="product-grid">
       <div class="product-card">
@@ -148,9 +159,46 @@
         <p>Auto-reply, auto-order, dan manajemen pelanggan.</p>
         <button>🔍 Detail</button>
       </div>
-      <!-- Tambahkan produk lainnya di sini -->
     </div>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+particlesJS("particles-js", {
+  particles: {
+    number: { value: 60, density: { enable: true, value_area: 800 }},
+    color: { value: "#ffffff" },
+    shape: { type: "circle" },
+    opacity: { value: 0.4 },
+    size: { value: 3, random: true },
+    line_linked: {
+      enable: true, distance: 150,
+      color: "#ffffff", opacity: 0.3, width: 1
+    },
+    move: { enable: true, speed: 2, direction: "none", random: false }
+  },
+  interactivity: {
+    events: {
+      onhover: { enable: true, mode: "grab" },
+      onclick: { enable: false }
+    },
+    modes: { grab: { distance: 200, line_linked: { opacity: 1 } } }
+  },
+  retina_detect: true
+});
+
+function login() {
+  const user = document.getElementById("username").value.trim();
+  const pass = document.getElementById("password").value.trim();
+
+  if (user === "admin" && pass === "1234") {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("produkBox").style.display = "block";
+  } else {
+    alert("Username atau password salah!");
+  }
+}
+</script>
 </body>
 </html>
