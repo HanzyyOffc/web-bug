@@ -165,17 +165,17 @@
       <div class="product-card">
         <h2>Bot WhatsApp</h2>
         <p>Bot fitur lengkap & aman digunakan</p>
-        <button onclick="addToCart('Bot WhatsApp')">Tambah ke Keranjang</button>
+        <button onclick="addToCart('Bot WhatsApp', 50000)">Tambah ke Keranjang</button>
       </div>
       <div class="product-card">
         <h2>Script Auto Order</h2>
         <p>Integrasi dengan WhatsApp & Telegram</p>
-        <button onclick="addToCart('Script Auto Order')">Tambah ke Keranjang</button>
+        <button onclick="addToCart('Script Auto Order', 75000)">Tambah ke Keranjang</button>
       </div>
       <div class="product-card">
         <h2>Panel Web Payment</h2>
         <p>Struk otomatis, notifikasi real-time</p>
-        <button onclick="addToCart('Panel Web Payment')">Tambah ke Keranjang</button>
+        <button onclick="addToCart('Panel Web Payment', 100000)">Tambah ke Keranjang</button>
       </div>
     </div>
     <div class="show-cart">
@@ -200,8 +200,8 @@ function masuk() {
   document.getElementById("produkBox").style.display = "block";
   document.getElementById("displayName").innerText = nama;
 }
-function addToCart(item) {
-  cart.push(item);
+function addToCart(item, harga) {
+  cart.push({ nama: item, harga: harga });
   document.getElementById("cartCount").innerText = cart.length;
   tampilkanKeranjang();
 }
@@ -211,7 +211,7 @@ function toggleCart() {
 }
 function tampilkanKeranjang() {
   const list = document.getElementById("cartList");
-  list.innerHTML = cart.map(item => `<div class='keranjang-item'>${item}</div>`).join('');
+  list.innerHTML = cart.map(item => `<div class='keranjang-item'>${item.nama} - Rp${item.harga.toLocaleString()}` + `</div>`).join('');
 }
 function checkout() {
   if (cart.length === 0) {
@@ -219,8 +219,14 @@ function checkout() {
     return;
   }
   const nama = document.getElementById("displayName").innerText;
-  const pesan = encodeURIComponent(`Checkout dari ${nama}:%0A${cart.map(i => '- ' + i).join('%0A')}`);
-  const link = `https://wa.me/6288989566141?text=${pesan}`;
+  let pesan = `Checkout dari ${nama}:%0A`;
+  let total = 0;
+  cart.forEach(item => {
+    pesan += `- ${item.nama} (Rp${item.harga.toLocaleString()})%0A`;
+    total += item.harga;
+  });
+  pesan += `%0ATotal: Rp${total.toLocaleString()}`;
+  const link = `https://wa.me/6288989566141?text=${encodeURIComponent(pesan)}`;
   window.open(link, '_blank');
 }
 </script>
