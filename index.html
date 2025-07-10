@@ -34,6 +34,19 @@
       width: 100%;
       max-width: 1200px;
     }
+    .admin-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.8rem;
+      background: rgba(255,255,255,0.1);
+      color: var(--main);
+      border: 1px solid var(--second);
+      padding: 5px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      z-index: 10;
+    }
     .glass-box {
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.1);
@@ -146,6 +159,7 @@
 <body>
 <div id="particles-js"></div>
 <div class="container">
+  <button class="admin-btn" onclick="lihatSemua()">👁️ Semua Login</button>
   <div class="glass-box login-box" id="loginBox">
     <h2>Masukkan Nama Anda</h2>
     <input type="text" id="username" placeholder="Nama Anda" />
@@ -182,35 +196,18 @@
 
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
-particlesJS("particles-js", {
-  particles: {
-    number: { value: 60, density: { enable: true, value_area: 800 }},
-    color: { value: "#ffffff" },
-    shape: { type: "circle" },
-    opacity: { value: 0.4 },
-    size: { value: 3, random: true },
-    line_linked: {
-      enable: true, distance: 150,
-      color: "#ffffff", opacity: 0.3, width: 1
-    },
-    move: { enable: true, speed: 2, direction: "none", random: false }
-  },
-  interactivity: {
-    events: {
-      onhover: { enable: true, mode: "grab" },
-      onclick: { enable: false }
-    },
-    modes: { grab: { distance: 200, line_linked: { opacity: 1 } } }
-  },
-  retina_detect: true
-});
-
 const BIN_ID = "686f49c06a80be34f4534f64";
 const API_KEY = "$2a$10$GyDWtMK0NviE0b/eCV.eo.IyWvhOFDfJGhbLmPhaiYbMt9qusgED2";
 const headers = {
   "Content-Type": "application/json",
   "X-Master-Key": API_KEY
 };
+
+particlesJS("particles-js", {
+  particles: { number: { value: 60, density: { enable: true, value_area: 800 } }, color: { value: "#ffffff" }, shape: { type: "circle" }, opacity: { value: 0.4 }, size: { value: 3, random: true }, line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.3, width: 1 }, move: { enable: true, speed: 2, direction: "none", random: false } },
+  interactivity: { events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: false } }, modes: { grab: { distance: 200, line_linked: { opacity: 1 } } } },
+  retina_detect: true
+});
 
 function masuk() {
   const nama = document.getElementById("username").value.trim();
@@ -230,7 +227,6 @@ async function simpanDataUser(nama, produk) {
   const data = await res.json();
   const riwayat = data.record || [];
   riwayat.push({ nama, produk, waktu: new Date().toLocaleString() });
-
   await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
     method: "PUT",
     headers,
@@ -263,6 +259,13 @@ function checkout(namaProduk) {
   const nama = document.getElementById("displayName").innerText;
   alert("🛒 Anda telah memilih: " + namaProduk + "\nData tersimpan!");
   simpanDataUser(nama, namaProduk);
+}
+
+async function lihatSemua() {
+  const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers });
+  const data = await res.json();
+  const list = data.record.map(r => `👤 <b>${r.nama}</b> - ✅ ${r.produk} - <small>${r.waktu}</small>`).reverse().join("<br>");
+  alert("📋 Semua Riwayat:\n\n" + list);
 }
 </script>
 </body>
