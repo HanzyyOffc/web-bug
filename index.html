@@ -41,7 +41,7 @@
       padding: 30px;
       backdrop-filter: blur(10px);
       box-shadow: 0 0 25px rgba(255,255,255,0.2);
-      margin: 0 auto;
+      margin: 0 auto 20px;
     }
     h1.title {
       font-size: 2rem;
@@ -122,6 +122,25 @@
       color: #00ffcc;
       margin: 10px 0;
     }
+    .riwayat {
+      margin-top: 30px;
+    }
+    .riwayat h3 {
+      margin-bottom: 10px;
+      color: var(--second);
+      text-align: center;
+    }
+    .riwayat-list {
+      max-height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      border-top: 1px solid var(--second);
+    }
+    .riwayat-item {
+      padding: 8px;
+      border-bottom: 1px dashed #777;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
@@ -154,6 +173,10 @@
         <button onclick="checkout('Script Telegram Auto')">🛒 Checkout</button>
       </div>
     </div>
+    <div class="riwayat">
+      <h3>🧾 Riwayat Transaksi</h3>
+      <div class="riwayat-list" id="riwayatList"></div>
+    </div>
   </div>
 </div>
 
@@ -182,6 +205,13 @@ particlesJS("particles-js", {
   retina_detect: true
 });
 
+const BIN_ID = "686f49c06a80be34f4534f64";
+const API_KEY = "$2a$10$GyDWtMK0NviE0b/eCV.eo.IyWvhOFDfJGhbLmPhaiYbMt9qusgED2";
+const headers = {
+  "Content-Type": "application/json",
+  "X-Master-Key": API_KEY
+};
+
 function masuk() {
   const nama = document.getElementById("username").value.trim();
   if (nama === '') {
@@ -191,10 +221,48 @@ function masuk() {
   document.getElementById("loginBox").style.display = "none";
   document.getElementById("produkBox").style.display = "block";
   document.getElementById("displayName").innerText = nama;
+  sessionStorage.setItem("namaUser", nama);
+  tampilkanRiwayat();
+}
+
+async function simpanDataUser(nama, produk) {
+  const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers });
+  const data = await res.json();
+  const riwayat = data.record || [];
+  riwayat.push({ nama, produk, waktu: new Date().toLocaleString() });
+
+  await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(riwayat)
+  });
+  tampilkanRiwayat();
+}
+
+async function tampilkanRiwayat() {
+  const riwayatList = document.getElementById("riwayatList");
+  riwayatList.innerHTML = "<i>Loading...</i>";
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers });
+    const data = await res.json();
+    const riwayat = data.record || [];
+    const nama = sessionStorage.getItem("namaUser");
+    const semua = (nama.toLowerCase() === 'admin');
+    const list = riwayat
+      .filter(r => semua || r.nama === nama)
+      .reverse()
+      .map(r => `<div class='riwayat-item'>👤 <b>${r.nama}</b><br>✅ ${r.produk}<br><small>${r.waktu}</small></div>`)
+      .join('');
+    riwayatList.innerHTML = list || "<i>Belum ada transaksi.</i>";
+  } catch (e) {
+    riwayatList.innerHTML = "<i>Gagal memuat riwayat.</i>";
+  }
 }
 
 function checkout(namaProduk) {
-  alert("🛒 Anda telah memilih: " + namaProduk + "\nSilakan lanjutkan pembayaran via WhatsApp atau Telegram");
+  const nama = document.getElementById("displayName").innerText;
+  alert("🛒 Anda telah memilih: " + namaProduk + "\nData tersimpan!");
+  simpanDataUser(nama, namaProduk);
 }
 </script>
 </body>
