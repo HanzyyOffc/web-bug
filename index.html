@@ -23,10 +23,7 @@
       display: flex; align-items: center; justify-content: center;
     }
     .container {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      max-width: 1200px;
+      width: 100%; max-width: 1000px;
     }
     .glass-box {
       background: rgba(255,255,255,0.05);
@@ -35,7 +32,7 @@
       padding: 30px;
       backdrop-filter: blur(10px);
       box-shadow: 0 0 25px rgba(255,255,255,0.2);
-      margin: 0 auto 20px;
+      margin-bottom: 20px;
     }
     h1.title {
       font-size: 2rem;
@@ -60,7 +57,6 @@
       padding: 20px;
       text-align: center;
       transition: 0.3s;
-      border: 1px solid rgba(255,255,255,0.1);
     }
     .product-card:hover {
       transform: scale(1.05);
@@ -68,7 +64,6 @@
     }
     .product-card h2 {
       font-size: 1.2rem;
-      margin: 10px 0;
       color: var(--primary);
     }
     .product-card p {
@@ -84,77 +79,39 @@
       border-radius: 30px;
       cursor: pointer;
       box-shadow: 0 0 10px var(--main);
-      font-size: 0.9rem;
     }
-    .login-box {
-      max-width: 400px;
-      margin: 0 auto 30px;
-      text-align: center;
-    }
-    input[type="text"] {
+    .login-box input[type="text"], select {
       width: 100%;
       padding: 12px;
-      background: rgba(255,255,255,0.05);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      margin-bottom: 10px;
-    }
-    select {
-      width: 100%;
-      padding: 10px;
+      margin-bottom: 12px;
       background: rgba(255,255,255,0.1);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
       border-radius: 10px;
-      margin-top: 10px;
     }
-    .btn-login {
+    .login-box button {
       width: 100%;
       padding: 12px;
       background: linear-gradient(135deg, var(--main), var(--second));
+      color: black;
       border: none;
       border-radius: 30px;
-      color: #000;
       font-size: 1rem;
       cursor: pointer;
       box-shadow: 0 0 10px var(--main);
     }
-    #notif {
-      text-align: center;
-      color: #00ffcc;
-      margin: 10px 0;
-    }
-    #keranjangBox {
-      display: none;
-      margin-top: 20px;
-    }
     .keranjang-item {
-      padding: 10px;
-      border-bottom: 1px dashed #ccc;
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
     }
-    .show-cart {
-      text-align: center;
-      margin-top: 15px;
-    }
-    .show-cart button {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid var(--main);
-      padding: 8px 20px;
-      color: var(--main);
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    #checkoutBtn {
-      margin-top: 20px;
-      background: #00ffcc;
-      color: #000;
+    .keranjang-item button {
+      background: crimson;
+      color: white;
       border: none;
-      padding: 12px 20px;
-      border-radius: 20px;
-      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 8px;
       cursor: pointer;
-      width: 100%;
     }
   </style>
 </head>
@@ -162,99 +119,101 @@
 <div class="container">
   <div class="glass-box login-box" id="loginBox">
     <h2>Masukkan Nama Anda</h2>
-    <input type="text" id="username" placeholder="Nama Anda" />
-    <button class="btn-login" onclick="masuk()">Masuk</button>
-    <div id="notif"></div>
+    <input type="text" id="username" placeholder="Nama Anda..." />
+    <button onclick="masuk()">Masuk</button>
   </div>
 
-  <div class="glass-box" id="produkBox" style="display: none;">
+  <div class="glass-box" id="produkBox" style="display:none;">
     <div class="welcome">Selamat datang, <span id="displayName">User</span> 👋</div>
-    <h1 class="title">Produk Hanzyy Terbaik</h1>
+    <h1 class="title">Daftar Produk Hanzyy</h1>
+
     <div class="product-grid">
       <div class="product-card">
-        <h2>Bot WhatsApp</h2>
-        <p>Bot fitur lengkap & aman digunakan</p>
-        <button onclick="addToCart('Bot WhatsApp', 50000)">Tambah ke Keranjang</button>
+        <h2>Script Bot WhatsApp</h2>
+        <p>Bot lengkap siap pakai</p>
+        <button onclick="addToCart('Bot WhatsApp', 50000)">Tambah</button>
       </div>
       <div class="product-card">
-        <h2>Script Auto Order</h2>
-        <p>Integrasi dengan WhatsApp & Telegram</p>
-        <button onclick="addToCart('Script Auto Order', 75000)">Tambah ke Keranjang</button>
+        <h2>Script Panel Payment</h2>
+        <p>Struk otomatis dan QR ready</p>
+        <button onclick="addToCart('Panel Payment', 75000)">Tambah</button>
       </div>
       <div class="product-card">
-        <h2>Panel Web Payment</h2>
-        <p>Struk otomatis, notifikasi real-time</p>
-        <button onclick="addToCart('Panel Web Payment', 100000)">Tambah ke Keranjang</button>
+        <h2>Auto Checkout System</h2>
+        <p>Checkout by WA & Telegram</p>
+        <button onclick="addToCart('Auto Checkout', 60000)">Tambah</button>
       </div>
     </div>
-    <div class="show-cart">
-      <button onclick="toggleCart()">🛒 Lihat Keranjang (<span id="cartCount">0</span>)</button>
-    </div>
-    <div class="glass-box" id="keranjangBox">
-      <h3>Keranjang Anda</h3>
+
+    <div class="glass-box" id="keranjangBox" style="margin-top:20px;">
+      <h3>🛒 Keranjang Anda</h3>
       <div id="cartList"></div>
+      <button onclick="hapusSemua()">🧹 Hapus Semua</button>
+      <br/><br/>
       <select id="metodeBayar">
         <option value="QRIS">QRIS</option>
         <option value="Dana">Dana</option>
         <option value="Gopay">Gopay</option>
         <option value="Transfer">Transfer Bank</option>
       </select>
-      <button id="checkoutBtn" onclick="checkout()">Checkout Sekarang</button>
+      <button onclick="checkout()" style="margin-top:15px;">📤 Checkout via WhatsApp</button>
     </div>
   </div>
 </div>
+
 <script>
 let cart = [];
-const DISKON = 0.1;
+const diskon = 0.1;
 
 function masuk() {
   const nama = document.getElementById("username").value.trim();
-  if (!nama) {
-    document.getElementById("notif").innerText = "Masukkan nama Anda dulu";
-    return;
-  }
+  if (!nama) return alert("Masukkan nama terlebih dahulu!");
   document.getElementById("loginBox").style.display = "none";
   document.getElementById("produkBox").style.display = "block";
   document.getElementById("displayName").innerText = nama;
 }
 
-function addToCart(item, harga) {
-  cart.push({ nama: item, harga: harga });
-  document.getElementById("cartCount").innerText = cart.length;
-  tampilkanKeranjang();
+function addToCart(nama, harga) {
+  cart.push({ nama, harga });
+  renderCart();
 }
 
-function toggleCart() {
-  const box = document.getElementById("keranjangBox");
-  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+function renderCart() {
+  const el = document.getElementById("cartList");
+  el.innerHTML = cart.map((item, i) => `
+    <div class="keranjang-item">
+      ${item.nama} - Rp${item.harga.toLocaleString()}
+      <button onclick="hapusItem(${i})">x</button>
+    </div>`).join('');
 }
 
-function tampilkanKeranjang() {
-  const list = document.getElementById("cartList");
-  list.innerHTML = cart.map(item => `<div class='keranjang-item'>${item.nama} - Rp${item.harga.toLocaleString()}` + `</div>`).join('');
+function hapusItem(i) {
+  cart.splice(i, 1);
+  renderCart();
+}
+
+function hapusSemua() {
+  cart = [];
+  renderCart();
 }
 
 function checkout() {
-  if (cart.length === 0) {
-    alert("Keranjang masih kosong!");
-    return;
-  }
+  if (!cart.length) return alert("Keranjang kosong!");
   const nama = document.getElementById("displayName").innerText;
   const metode = document.getElementById("metodeBayar").value;
-  let pesan = `Checkout dari ${nama}:%0A`;
   let total = 0;
+  let pesan = `Checkout dari ${nama}:\n`;
   cart.forEach(item => {
-    pesan += `- ${item.nama} (Rp${item.harga.toLocaleString()})%0A`;
+    pesan += `- ${item.nama} (Rp${item.harga.toLocaleString()})\n`;
     total += item.harga;
   });
-  const potongan = total * DISKON;
+  const potongan = total * diskon;
   const totalAkhir = total - potongan;
-  pesan += `%0ADiskon: 10% (-Rp${potongan.toLocaleString()})`;
-  pesan += `%0ATotal: Rp${totalAkhir.toLocaleString()}`;
-  pesan += `%0AMetode Pembayaran: ${metode}`;
-
-  const link = `https://wa.me/6288989566141?text=${encodeURIComponent(pesan)}`;
-  window.open(link, '_blank');
+  pesan += `\nDiskon: 10% (-Rp${potongan.toLocaleString()})`;
+  pesan += `\nTotal Bayar: Rp${totalAkhir.toLocaleString()}`;
+  pesan += `\nMetode: ${metode}`;
+  const url = `https://wa.me/6288989566141?text=${encodeURIComponent(pesan)}`;
+  window.open(url, '_blank');
 }
 </script>
 </body>
