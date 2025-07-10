@@ -197,116 +197,235 @@ const diskon = 0.1;
 const produkList = document.getElementById("produkList");
 produk.forEach(p => {
   const div = document.createElement("div");
-  div.className = "produk-card";
-  div.innerHTML = `<h4>${p.nama}</h4><p>Rp${p.harga.toLocaleString()}</p><button onclick="addToCart('${p.nama}', ${p.harga})">+ Keranjang</button>`;
-  produkList.appendChild(div);
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login HanzyyOffc</title>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <style>
+    :root {
+      --bg: #0e0e0e;
+      --text: #fff;
+      --primary: #00ffcc;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    #particles-js {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+    }
+
+    .login-panel, .produk-panel {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .glass-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 40px 30px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 0 25px rgba(0, 255, 204, 0.2);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1rem;
+      margin-bottom: 20px;
+      outline: none;
+      border: 1px solid var(--primary);
+    }
+
+    button {
+      padding: 12px 20px;
+      background: var(--primary);
+      color: black;
+      font-weight: bold;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 15px var(--primary);
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #00ccaa;
+      box-shadow: 0 0 20px #00ccaa;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+
+    .produk-panel {
+      flex-direction: column;
+      display: none;
+      text-align: center;
+    }
+
+    .produk-list {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 900px;
+      width: 100%;
+      padding: 0 20px;
+    }
+
+    .produk-item {
+      background: rgba(255, 255, 255, 0.07);
+      padding: 20px;
+      border-radius: 12px;
+      transition: 0.3s;
+    }
+
+    .produk-item:hover {
+      background: rgba(255, 255, 255, 0.12);
+      transform: scale(1.03);
+    }
+
+    .produk-item h3 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    #gantiNamaBtn {
+      background: #ff66ff;
+      color: white;
+      margin-top: 20px;
+      box-shadow: 0 0 10px #ff66ff;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+  </style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+
+<!-- LOGIN PANEL -->
+<div class="login-panel" id="loginPanel">
+  <div class="glass-box">
+    <h2>👤 Masukkan Nama Anda</h2>
+    <input type="text" id="inputNama" placeholder="Contoh: Hanzy" />
+    <button onclick="submitNama()">🚀 Lanjutkan</button>
+  </div>
+</div>
+
+<!-- HALAMAN PRODUK -->
+<div class="produk-panel" id="produkPanel">
+  <h1>👋 Selamat datang, <span id="userNameLabel"></span>!</h1>
+  <button id="gantiNamaBtn" onclick="gantiNama()">🔁 Ganti Nama</button>
+
+  <div class="produk-list" id="produkList">
+    <!-- Produk akan ditambahkan lewat JS -->
+  </div>
+</div>
+
+<script>
+particlesJS("particles-js", {
+  particles: {
+    number: { value: 60, density: { enable: true, value_area: 800 }},
+    color: { value: "#ffffff" },
+    shape: { type: "circle" },
+    opacity: { value: 0.4 },
+    size: { value: 3, random: true },
+    line_linked: {
+      enable: true, distance: 150,
+      color: "#ffffff", opacity: 0.3, width: 1
+    },
+    move: { enable: true, speed: 2 }
+  },
+  interactivity: {
+    events: {
+      onhover: { enable: true, mode: "grab" }
+    },
+    modes: { grab: { distance: 200, line_linked: { opacity: 1 } } }
+  },
+  retina_detect: true
 });
 
-function addToCart(nama, harga) {
-  cart.push({ nama, harga });
-  renderCart();
-}
+const produkData = [
+  { nama: "Script WhatsApp Bot", harga: 50000 },
+  { nama: "Script Telegram Auto Reply", harga: 45000 },
+  { nama: "Obfuscator JS", harga: 60000 },
+  { nama: "Panel Web Payment", harga: 70000 },
+  { nama: "Script SlayerV4", harga: 25000 },
+  { nama: "Admin Panel Private", harga: 20000 },
+  { nama: "Admin Panel Public", harga: 15000 },
+  { nama: "Panel Unlimited", harga: 10000 }
+];
 
-function renderCart() {
-  const box = document.getElementById("keranjangList");
-  if (!cart.length) return box.innerHTML = "<i>Keranjang kosong</i>";
-  box.innerHTML = "";
-  cart.forEach((item, i) => {
-    const div = document.createElement("div");
-    div.className = "keranjang-item";
-    div.innerHTML = `${item.nama} <b>Rp${item.harga.toLocaleString()}</b>`;
-    box.appendChild(div);
+function tampilkanProduk() {
+  const produkList = document.getElementById("produkList");
+  produkList.innerHTML = "";
+  produkData.forEach(p => {
+    const item = document.createElement("div");
+    item.className = "produk-item";
+    item.innerHTML = `<h3>${p.nama}</h3><p>Rp${p.harga.toLocaleString()}</p>`;
+    produkList.appendChild(item);
   });
 }
 
-function checkout() {
-  if (!cart.length) return alert("Keranjang kosong!");
-  const metode = document.getElementById("metodeBayar").value;
-  let pesan = `Saya ingin membeli:\n`;
-  let total = 0;
-  cart.forEach(item => {
-    pesan += `- ${item.nama} (Rp${item.harga.toLocaleString()})\n`;
-    total += item.harga;
-  });
-  const potongan = total * diskon;
-  const totalAkhir = total - potongan;
-  pesan += `\nDiskon 10%: -Rp${potongan.toLocaleString()}`;
-  pesan += `\nTotal: Rp${totalAkhir.toLocaleString()}`;
-  pesan += `\nMetode: ${metode}`;
-
-  const url = `https://wa.me/6288989566141?text=${encodeURIComponent(pesan)}`;
-  window.open(url, '_blank');
-
-  const today = new Date().toISOString().slice(0, 10);
-  if (!statistikHarian[today]) statistikHarian[today] = { transaksi: 0, produk: 0, pendapatan: 0 };
-  statistikHarian[today].transaksi++;
-  statistikHarian[today].produk += cart.length;
-  statistikHarian[today].pendapatan += totalAkhir;
-  updateChart();
-
-  cart.length = 0;
-  renderCart();
+function submitNama() {
+  const nama = document.getElementById("inputNama").value.trim();
+  if (!nama) return alert("Masukkan nama!");
+  localStorage.setItem("namaUser", nama);
+  bukaHalamanProduk(nama);
 }
 
-function generateChartData(data) {
-  const dates = Object.keys(data).sort();
-  return {
-    labels: dates,
-    datasets: [
-      {
-        label: 'Transaksi',
-        data: dates.map(d => data[d].transaksi),
-        borderColor: '#00ffcc',
-        backgroundColor: '#00ffcc40',
-        tension: 0.3
-      },
-      {
-        label: 'Pendapatan',
-        data: dates.map(d => data[d].pendapatan),
-        borderColor: '#ffcc00',
-        backgroundColor: '#ffcc0030',
-        tension: 0.3
-      }
-    ]
-  };
-}
-
-let chart;
-function updateChart() {
-  const data = generateChartData(statistikHarian);
-  if (chart) {
-    chart.data = data;
-    chart.update();
-  } else {
-    chart = new Chart(document.getElementById("salesChart"), {
-      type: 'line',
-      data: data,
-      options: { responsive: true }
-    });
-  }
-}
-
-function filterChart() {
-  const start = document.getElementById("startDate").value;
-  const end = document.getElementById("endDate").value;
-  if (!start || !end) return alert("Pilih tanggal!");
-  const filtered = {};
-  for (const tanggal in statistikHarian) {
-    if (tanggal >= start && tanggal <= end) {
-      filtered[tanggal] = statistikHarian[tanggal];
-    }
-  }
-  chart.data = generateChartData(filtered);
-  chart.update();
+function bukaHalamanProduk(nama) {
+  document.getElementById("loginPanel").style.display = "none";
+  document.getElementById("produkPanel").style.display = "flex";
+  document.getElementById("userNameLabel").innerText = nama;
+  tampilkanProduk();
 }
 
 function gantiNama() {
   const namaBaru = prompt("Masukkan nama baru:");
   if (namaBaru) {
     localStorage.setItem("namaUser", namaBaru);
-    document.getElementById("sambutan").innerHTML = `👋 Hai, <b>${namaBaru}</b>! Selamat datang di panel produk <b>HanzyyOffc</b>.`;
+    bukaHalamanProduk(namaBaru);
   }
 }
+
+window.onload = () => {
+  const saved = localStorage.getItem("namaUser");
+  if (saved) bukaHalamanProduk(saved);
+};
 </script>
+
 </body>
 </html>
