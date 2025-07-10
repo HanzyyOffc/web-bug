@@ -100,6 +100,15 @@
       border-radius: 10px;
       margin-bottom: 10px;
     }
+    select {
+      width: 100%;
+      padding: 10px;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      margin-top: 10px;
+    }
     .btn-login {
       width: 100%;
       padding: 12px;
@@ -184,12 +193,20 @@
     <div class="glass-box" id="keranjangBox">
       <h3>Keranjang Anda</h3>
       <div id="cartList"></div>
+      <select id="metodeBayar">
+        <option value="QRIS">QRIS</option>
+        <option value="Dana">Dana</option>
+        <option value="Gopay">Gopay</option>
+        <option value="Transfer">Transfer Bank</option>
+      </select>
       <button id="checkoutBtn" onclick="checkout()">Checkout Sekarang</button>
     </div>
   </div>
 </div>
 <script>
 let cart = [];
+const DISKON = 0.1;
+
 function masuk() {
   const nama = document.getElementById("username").value.trim();
   if (!nama) {
@@ -200,32 +217,42 @@ function masuk() {
   document.getElementById("produkBox").style.display = "block";
   document.getElementById("displayName").innerText = nama;
 }
+
 function addToCart(item, harga) {
   cart.push({ nama: item, harga: harga });
   document.getElementById("cartCount").innerText = cart.length;
   tampilkanKeranjang();
 }
+
 function toggleCart() {
   const box = document.getElementById("keranjangBox");
   box.style.display = box.style.display === 'none' ? 'block' : 'none';
 }
+
 function tampilkanKeranjang() {
   const list = document.getElementById("cartList");
   list.innerHTML = cart.map(item => `<div class='keranjang-item'>${item.nama} - Rp${item.harga.toLocaleString()}` + `</div>`).join('');
 }
+
 function checkout() {
   if (cart.length === 0) {
     alert("Keranjang masih kosong!");
     return;
   }
   const nama = document.getElementById("displayName").innerText;
+  const metode = document.getElementById("metodeBayar").value;
   let pesan = `Checkout dari ${nama}:%0A`;
   let total = 0;
   cart.forEach(item => {
     pesan += `- ${item.nama} (Rp${item.harga.toLocaleString()})%0A`;
     total += item.harga;
   });
-  pesan += `%0ATotal: Rp${total.toLocaleString()}`;
+  const potongan = total * DISKON;
+  const totalAkhir = total - potongan;
+  pesan += `%0ADiskon: 10% (-Rp${potongan.toLocaleString()})`;
+  pesan += `%0ATotal: Rp${totalAkhir.toLocaleString()}`;
+  pesan += `%0AMetode Pembayaran: ${metode}`;
+
   const link = `https://wa.me/6288989566141?text=${encodeURIComponent(pesan)}`;
   window.open(link, '_blank');
 }
