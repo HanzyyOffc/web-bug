@@ -116,6 +116,37 @@
       color: #00ffcc;
       margin: 10px 0;
     }
+    #keranjangBox {
+      display: none;
+      margin-top: 20px;
+    }
+    .keranjang-item {
+      padding: 10px;
+      border-bottom: 1px dashed #ccc;
+    }
+    .show-cart {
+      text-align: center;
+      margin-top: 15px;
+    }
+    .show-cart button {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid var(--main);
+      padding: 8px 20px;
+      color: var(--main);
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    #checkoutBtn {
+      margin-top: 20px;
+      background: #00ffcc;
+      color: #000;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -134,22 +165,31 @@
       <div class="product-card">
         <h2>Bot WhatsApp</h2>
         <p>Bot fitur lengkap & aman digunakan</p>
-        <button>Beli Sekarang</button>
+        <button onclick="addToCart('Bot WhatsApp')">Tambah ke Keranjang</button>
       </div>
       <div class="product-card">
         <h2>Script Auto Order</h2>
         <p>Integrasi dengan WhatsApp & Telegram</p>
-        <button>Beli Sekarang</button>
+        <button onclick="addToCart('Script Auto Order')">Tambah ke Keranjang</button>
       </div>
       <div class="product-card">
         <h2>Panel Web Payment</h2>
         <p>Struk otomatis, notifikasi real-time</p>
-        <button>Beli Sekarang</button>
+        <button onclick="addToCart('Panel Web Payment')">Tambah ke Keranjang</button>
       </div>
+    </div>
+    <div class="show-cart">
+      <button onclick="toggleCart()">🛒 Lihat Keranjang (<span id="cartCount">0</span>)</button>
+    </div>
+    <div class="glass-box" id="keranjangBox">
+      <h3>Keranjang Anda</h3>
+      <div id="cartList"></div>
+      <button id="checkoutBtn" onclick="checkout()">Checkout Sekarang</button>
     </div>
   </div>
 </div>
 <script>
+let cart = [];
 function masuk() {
   const nama = document.getElementById("username").value.trim();
   if (!nama) {
@@ -159,6 +199,29 @@ function masuk() {
   document.getElementById("loginBox").style.display = "none";
   document.getElementById("produkBox").style.display = "block";
   document.getElementById("displayName").innerText = nama;
+}
+function addToCart(item) {
+  cart.push(item);
+  document.getElementById("cartCount").innerText = cart.length;
+  tampilkanKeranjang();
+}
+function toggleCart() {
+  const box = document.getElementById("keranjangBox");
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+function tampilkanKeranjang() {
+  const list = document.getElementById("cartList");
+  list.innerHTML = cart.map(item => `<div class='keranjang-item'>${item}</div>`).join('');
+}
+function checkout() {
+  if (cart.length === 0) {
+    alert("Keranjang masih kosong!");
+    return;
+  }
+  const nama = document.getElementById("displayName").innerText;
+  const pesan = encodeURIComponent(`Checkout dari ${nama}:%0A${cart.map(i => '- ' + i).join('%0A')}`);
+  const link = `https://wa.me/6288989566141?text=${pesan}`;
+  window.open(link, '_blank');
 }
 </script>
 </body>
