@@ -49,6 +49,12 @@
       color: var(--main);
       margin-bottom: 20px;
     }
+    .welcome {
+      text-align: center;
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -130,7 +136,7 @@
 <div id="particles-js"></div>
 <div class="container">
   <div class="glass-box login-box" id="loginBox">
-    <h1 class="title">Login Admin</h1>
+    <h1 class="title">Login Panel - ChatGPT</h1>
     <input type="text" id="username" placeholder="Username" />
     <input type="password" id="password" placeholder="Password" />
     <button class="btn-login" onclick="login()"><i class="fas fa-sign-in-alt"></i> Login</button>
@@ -142,6 +148,7 @@
   </div>
 
   <div class="glass-box" id="produkBox" style="display: none;">
+    <div class="welcome">Selamat datang, <span id="displayName">admin</span> 👋</div>
     <h1 class="title">Daftar Produk</h1>
     <div class="product-grid">
       <div class="product-card">
@@ -195,6 +202,7 @@ function login() {
   if (user === "admin" && pass === "1234") {
     document.getElementById("loginBox").style.display = "none";
     document.getElementById("produkBox").style.display = "block";
+    document.getElementById("displayName").innerText = user;
   } else {
     alert("Username atau password salah!");
   }
