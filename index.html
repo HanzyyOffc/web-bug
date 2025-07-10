@@ -94,9 +94,10 @@
     }
     .login-box {
       max-width: 400px;
-      margin: 0 auto;
+      margin: 0 auto 30px;
+      text-align: center;
     }
-    input {
+    input[type="text"] {
       width: 100%;
       padding: 12px;
       background: rgba(255,255,255,0.05);
@@ -104,11 +105,6 @@
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 10px;
       margin-bottom: 10px;
-    }
-    input:focus {
-      outline: none;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid var(--main);
     }
     .btn-login {
       width: 100%;
@@ -121,14 +117,10 @@
       cursor: pointer;
       box-shadow: 0 0 10px var(--main);
     }
-    .demo-info {
+    #notif {
       text-align: center;
-      margin-top: 15px;
-      font-size: 0.85rem;
-      color: #aaa;
-    }
-    .demo-info code {
       color: #00ffcc;
+      margin: 10px 0;
     }
   </style>
 </head>
@@ -136,35 +128,30 @@
 <div id="particles-js"></div>
 <div class="container">
   <div class="glass-box login-box" id="loginBox">
-    <h1 class="title">Login Panel - ChatGPT</h1>
-    <input type="text" id="username" placeholder="Username" />
-    <input type="password" id="password" placeholder="Password" />
-    <button class="btn-login" onclick="login()"><i class="fas fa-sign-in-alt"></i> Login</button>
-    <div class="demo-info">
-      <p><strong>Demo Login:</strong></p>
-      <p>👤 Username: <code>admin</code></p>
-      <p>🔒 Password: <code>1234</code></p>
-    </div>
+    <h2>Masukkan Nama Anda</h2>
+    <input type="text" id="username" placeholder="Nama Anda" />
+    <button class="btn-login" onclick="masuk()">Masuk</button>
+    <div id="notif"></div>
   </div>
 
   <div class="glass-box" id="produkBox" style="display: none;">
-    <div class="welcome">Selamat datang, <span id="displayName">admin</span> 👋</div>
+    <div class="welcome">Selamat datang, <span id="displayName">User</span> 👋</div>
     <h1 class="title">Daftar Produk</h1>
     <div class="product-grid">
       <div class="product-card">
         <h2>Script WhatsApp Bot</h2>
         <p>Bot WhatsApp full fitur anti banned & UI modern.</p>
-        <button>🔍 Detail</button>
+        <button onclick="checkout('Script WhatsApp Bot')">🛒 Checkout</button>
       </div>
       <div class="product-card">
         <h2>Obfuscator JS</h2>
         <p>Lindungi script JS kamu dari pembajakan.</p>
-        <button>🔍 Detail</button>
+        <button onclick="checkout('Obfuscator JS')">🛒 Checkout</button>
       </div>
       <div class="product-card">
         <h2>Script Telegram Auto</h2>
         <p>Auto-reply, auto-order, dan manajemen pelanggan.</p>
-        <button>🔍 Detail</button>
+        <button onclick="checkout('Script Telegram Auto')">🛒 Checkout</button>
       </div>
     </div>
   </div>
@@ -195,17 +182,19 @@ particlesJS("particles-js", {
   retina_detect: true
 });
 
-function login() {
-  const user = document.getElementById("username").value.trim();
-  const pass = document.getElementById("password").value.trim();
-
-  if (user === "admin" && pass === "1234") {
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("produkBox").style.display = "block";
-    document.getElementById("displayName").innerText = user;
-  } else {
-    alert("Username atau password salah!");
+function masuk() {
+  const nama = document.getElementById("username").value.trim();
+  if (nama === '') {
+    document.getElementById("notif").innerText = '⚠️ Nama tidak boleh kosong';
+    return;
   }
+  document.getElementById("loginBox").style.display = "none";
+  document.getElementById("produkBox").style.display = "block";
+  document.getElementById("displayName").innerText = nama;
+}
+
+function checkout(namaProduk) {
+  alert("🛒 Anda telah memilih: " + namaProduk + "\nSilakan lanjutkan pembayaran via WhatsApp atau Telegram");
 }
 </script>
 </body>
