@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Produk & Statistik Penjualan</title>
+  <title>Panel Produk HanzyyOffc</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
@@ -101,12 +101,35 @@
       border-radius: 10px;
       padding: 10px;
     }
+    button#gantiNama {
+      padding: 6px 14px;
+      background: #00ffcc;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
 <div id="particles-js"></div>
+<script>
+let namaUser = localStorage.getItem("namaUser");
+if (!namaUser) {
+  namaUser = prompt("Masukkan nama Anda:");
+  if (!namaUser) namaUser = "Pengguna";
+  localStorage.setItem("namaUser", namaUser);
+}
+</script>
+
 <div class="container">
-  <h1>🛍️ Daftar Produk</h1>
+  <h1>🎯 Panel Produk & Statistik Penjualan</h1>
+  <div style="text-align:center; margin-bottom:10px;">
+    <button id="gantiNama" onclick="gantiNama()">🔁 Ganti Nama</button>
+  </div>
+  <p id="sambutan" style="text-align:center; margin-top:-5px; margin-bottom:30px; color:#bbb; font-size:1rem;"></p>
+
   <div class="produk-grid" id="produkList"></div>
 
   <div class="keranjang" id="keranjangBox">
@@ -154,12 +177,17 @@ particlesJS("particles-js", {
   retina_detect: true
 });
 
-// Produk Dummy
+document.getElementById("sambutan").innerHTML = `👋 Hai, <b>${namaUser}</b>! Selamat datang di panel produk <b>HanzyyOffc</b>.`;
+
 const produk = [
   { nama: "Script WhatsApp Bot", harga: 50000 },
   { nama: "Script Telegram Auto Reply", harga: 45000 },
   { nama: "Obfuscator JS", harga: 60000 },
-  { nama: "Panel Web Payment", harga: 70000 }
+  { nama: "Panel Web Payment", harga: 70000 },
+  { nama: "Script SlayerV4", harga: 25000 },
+  { nama: "Admin Panel Private", harga: 20000 },
+  { nama: "Admin Panel Public", harga: 15000 },
+  { nama: "Panel Unlimited", harga: 10000 }
 ];
 
 const cart = [];
@@ -209,7 +237,6 @@ function checkout() {
   const url = `https://wa.me/6288989566141?text=${encodeURIComponent(pesan)}`;
   window.open(url, '_blank');
 
-  // Simpan statistik
   const today = new Date().toISOString().slice(0, 10);
   if (!statistikHarian[today]) statistikHarian[today] = { transaksi: 0, produk: 0, pendapatan: 0 };
   statistikHarian[today].transaksi++;
@@ -271,6 +298,14 @@ function filterChart() {
   }
   chart.data = generateChartData(filtered);
   chart.update();
+}
+
+function gantiNama() {
+  const namaBaru = prompt("Masukkan nama baru:");
+  if (namaBaru) {
+    localStorage.setItem("namaUser", namaBaru);
+    document.getElementById("sambutan").innerHTML = `👋 Hai, <b>${namaBaru}</b>! Selamat datang di panel produk <b>HanzyyOffc</b>.`;
+  }
 }
 </script>
 </body>
